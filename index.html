@@ -10,7 +10,7 @@
 <style>
 /* Layout: the agency's own poster as a page. White studio wall, red poster type set edge to edge, the team photo between the lines. All copy is set like their posts: wide caps with red letters. Single light look by choice. */
 :root {
-  --bg: #F2F2F2;      /* studio wall */
+  --bg: #EBEBEB;      /* studio wall */
   --paper: #FFFFFF;   /* A4 sheets on the floor */
   --ink: #121212;
   --line: #D6D6D6;
@@ -183,11 +183,21 @@ footer a:hover { color: var(--red); }
 
 /* Disco balls: canvas-drawn, hung by script in a layer behind the content, never behind a photo or logo */
 .disco-layer { position: absolute; left: 0; top: 0; width: 100%; overflow: hidden; z-index: -1; pointer-events: none; }
-.disco { position: absolute; background-size: 100% 100%; transform-origin: 50% 0; }
+.disco { position: absolute; background-size: 100% 100%; transform-origin: 50% 0; opacity: .72; transition: opacity .9s ease; }
+.disco.lit { opacity: 1; }
+/* Light thrown on the wall: white flecks around a ball, shown while the ball is level with the middle of the screen */
+.disco::before {
+  content: ""; position: absolute; left: 50%; top: 68.8%; width: 380%; aspect-ratio: 1; translate: -50% -50%;
+  background-image: var(--fi); background-position: var(--fp); background-size: var(--fs); background-repeat: no-repeat;
+  opacity: 0; scale: .6; transition: opacity .9s ease, scale 1.2s cubic-bezier(.2, .8, .2, 1);
+}
+.disco.lit::before { opacity: 1; scale: 1; }
 .disco::after { content: ""; position: absolute; left: 24%; top: 50%; width: 22%; aspect-ratio: 1; background: radial-gradient(circle, #fff 0 16%, rgba(255, 255, 255, 0) 62%); opacity: 0; }
 @media (prefers-reduced-motion: no-preference) {
   .disco { animation: sway var(--t, 7s) ease-in-out var(--dl, 0s) infinite alternate; }
   .disco::after { animation: twinkle 2.6s ease-in-out var(--dl, 0s) infinite; }
+  .disco.lit::after { animation-duration: 1.1s; }
+  .disco.lit::before { animation: spin 40s linear infinite; }
 }
 @keyframes sway { from { transform: rotate(-3.5deg); } to { transform: rotate(3.5deg); } }
 @keyframes twinkle { 0%, 60%, 100% { opacity: 0; transform: scale(.4); } 75% { opacity: 1; transform: scale(1.5); } }
@@ -603,15 +613,30 @@ input, textarea { transition: border-color .2s ease; }
 
       var layer = document.createElement('div'); layer.className = 'disco-layer'; layer.setAttribute('aria-hidden', 'true');
       document.body.insertBefore(layer, document.body.firstChild);
+      // Fleck pattern shared by every ball: small white squares scattered in a ring.
+      (function () {
+        var fi = [], fp = [], fs = [];
+        for (var f = 0; f < 26; f++) {
+          var ang = rnd() * 6.283, rad = 17 + rnd() * 31, sz = Math.round(5 + rnd() * 9);
+          fi.push('linear-gradient(#fff,#fff)');
+          fp.push((50 + Math.cos(ang) * rad).toFixed(1) + '% ' + (50 + Math.sin(ang) * rad).toFixed(1) + '%');
+          fs.push(sz + 'px ' + sz + 'px');
+        }
+        layer.style.setProperty('--fi', fi.join(',')); layer.style.setProperty('--fp', fp.join(',')); layer.style.setProperty('--fs', fs.join(','));
+      })();
+      var lightIO = 'IntersectionObserver' in window ? new IntersectionObserver(function (entries) {
+        entries.forEach(function (en) { en.target.classList.toggle('lit', en.isIntersecting); });
+      }, { rootMargin: '-28% 0px -28% 0px' }) : null;
       function hang() {
         seed = 11;
+        if (lightIO) lightIO.disconnect();
         layer.textContent = ''; layer.style.height = '0px';
         var W = document.documentElement.clientWidth, H = document.documentElement.scrollHeight, narrow = W < 700;
         var avoid = [].map.call(document.querySelectorAll('main img, .logo img, .badge'), function (el) {
           var q = el.getBoundingClientRect();
           return [q.left - 34, q.top + window.scrollY - 46, q.right + 34, q.bottom + window.scrollY + 46];
         });
-        for (var y = 200, n = 0; y < H - 300; y += narrow ? 340 : 290, n++) {
+        for (var y = 160, n = 0; y < H - 260; y += narrow ? 210 : 165, n++) {
           for (var t = 0; t < 8; t++) {
             var R = narrow ? 42 + rnd() * 70 : 60 + rnd() * 130, side = (n + t) % 3;
             var cx = side === 0 ? rnd() * W * 0.14 : side === 1 ? W - rnd() * W * 0.14 : W * 0.15 + rnd() * W * 0.7;
@@ -622,6 +647,7 @@ input, textarea { transition: border-color .2s ease; }
             d.className = 'disco';
             d.style.cssText = 'left:' + Math.round(cx - (R0 + PAD) * k) + 'px;top:' + Math.round(cy - (STR + PAD + R0) * k) + 'px;width:' + Math.round(UW * k) + 'px;height:' + Math.round(UH * k) + 'px;background-image:var(--ball' + (n % 3) + ');--t:' + (5 + rnd() * 4).toFixed(1) + 's;--dl:-' + (rnd() * 6).toFixed(1) + 's';
             layer.appendChild(d);
+            if (lightIO) lightIO.observe(d);
             break;
           }
         }
