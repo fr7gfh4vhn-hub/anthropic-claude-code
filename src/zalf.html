@@ -1,0 +1,271 @@
+<title>Zalf</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Zalf este o agenție de marketing: strategie, conținut, social media și reclame plătite, măsurate în clienți și vânzări.">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+/* Layout: left-aligned editorial column; the Z of the wordmark doubles as the four-step process diagram. */
+:root {
+  --bg: #F1F3F8;
+  --surface: #FFFFFF;
+  --fg: #10142B;
+  --muted: #555B78;
+  --line: #D5D9E6;
+  --accent: #3523E8;
+  --on-accent: #FFFFFF;
+  --mark: #FFCB3D;
+  --on-mark: #10142B;
+
+  --display: "Bricolage Grotesque", "Arial Narrow", Arial, sans-serif;
+  --body: "Instrument Sans", "Segoe UI", Helvetica, Arial, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, Menlo, Consolas, monospace;
+
+  --wrap: 1120px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0D0F20; --surface: #171A33; --fg: #ECEEF8; --muted: #A3A8C4;
+    --line: #2A2E4D; --accent: #8E84FF; --on-accent: #0D0F20;
+    --mark: #FFCB3D; --on-mark: #10142B; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0D0F20; --surface: #171A33; --fg: #ECEEF8; --muted: #A3A8C4;
+  --line: #2A2E4D; --accent: #8E84FF; --on-accent: #0D0F20;
+  --mark: #FFCB3D; --on-mark: #10142B; color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font: 400 1.0625rem/1.6 var(--body);
+  -webkit-font-smoothing: antialiased;
+}
+a { color: inherit; }
+:focus-visible { outline: 3px solid var(--mark); outline-offset: 3px; }
+
+.wrap {
+  max-width: var(--wrap);
+  margin-inline: auto;
+  padding-left: max(20px, env(safe-area-inset-left, 0px));
+  padding-right: max(20px, env(safe-area-inset-right, 0px));
+}
+
+/* Header */
+.top { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-block: 22px; flex-wrap: wrap; }
+.logo { font: 800 1.9rem/1 var(--display); letter-spacing: -0.04em; text-decoration: none; }
+.logo span { color: var(--accent); }
+.nav { display: flex; align-items: center; gap: 6px 26px; flex-wrap: wrap; font-weight: 500; font-size: 0.98rem; }
+.nav a { text-decoration: none; }
+.nav a:hover { text-decoration: underline; text-underline-offset: 5px; text-decoration-thickness: 2px; }
+
+.btn {
+  display: inline-block; border: 0; cursor: pointer;
+  background: var(--accent); color: var(--on-accent);
+  font: 600 1rem/1 var(--body); text-decoration: none;
+  padding: 15px 24px; border-radius: 999px;
+  transition: transform .15s ease;
+}
+.btn:hover { transform: translateY(-2px); }
+.nav .btn { padding: 11px 18px; font-size: 0.95rem; }
+.nav .btn:hover { text-decoration: none; }
+
+/* Hero */
+.hero { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 40px; align-items: center; padding-block: 48px 80px; }
+.eyebrow { font: 500 0.8rem/1 var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin: 0 0 22px; }
+h1 { font: 800 clamp(2.7rem, 7.4vw, 5.6rem)/0.98 var(--display); letter-spacing: -0.045em; margin: 0 0 28px; text-wrap: balance; }
+h1 mark { background: var(--mark); color: var(--on-mark); padding: 0 0.12em; border-radius: 0.08em; -webkit-box-decoration-break: clone; box-decoration-break: clone; }
+.lead { font-size: 1.2rem; color: var(--muted); max-width: 34em; margin: 0 0 34px; }
+.cta-row { display: flex; align-items: center; gap: 14px 24px; flex-wrap: wrap; }
+.link { font-weight: 600; text-underline-offset: 5px; text-decoration-thickness: 2px; }
+
+.zfig { margin: 0; min-width: 0; }
+.zfig svg { display: block; width: 100%; height: auto; max-width: 440px; margin-inline: auto; }
+.zline { fill: none; stroke: var(--accent); stroke-width: 22; stroke-linejoin: round; stroke-linecap: round; }
+.zdot { fill: var(--mark); stroke: var(--bg); stroke-width: 5; }
+.zlabel { font: 500 15px var(--mono); fill: var(--fg); }
+.znum { font: 500 13px var(--mono); fill: var(--on-mark); }
+@media (prefers-reduced-motion: no-preference) {
+  .zline { stroke-dasharray: 1100; animation: draw 1.3s cubic-bezier(.6,0,.2,1) both; }
+  @keyframes draw { from { stroke-dashoffset: 1100; } to { stroke-dashoffset: 0; } }
+}
+
+/* Sections */
+section { padding-block: 72px; border-top: 1px solid var(--line); }
+h2 { font: 700 clamp(1.9rem, 4.2vw, 3rem)/1.05 var(--display); letter-spacing: -0.035em; margin: 0 0 14px; text-wrap: balance; }
+.sub { color: var(--muted); max-width: 38em; margin: 0 0 44px; }
+
+.services { list-style: none; margin: 0; padding: 0; }
+.services li { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.5fr); gap: 8px 32px; padding-block: 22px; border-top: 1px solid var(--line); align-items: baseline; }
+.services li:last-child { border-bottom: 1px solid var(--line); }
+.services h3 { font: 700 1.5rem/1.15 var(--display); letter-spacing: -0.02em; margin: 0; }
+.services p { margin: 0; color: var(--muted); }
+
+.steps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 28px; }
+.steps .n { display: inline-grid; place-items: center; width: 34px; height: 34px; border-radius: 50%; background: var(--mark); color: var(--on-mark); font: 500 0.9rem/1 var(--mono); margin-bottom: 16px; }
+.steps h3 { font: 700 1.3rem/1.15 var(--display); letter-spacing: -0.02em; margin: 0 0 8px; }
+.steps p { margin: 0; color: var(--muted); font-size: 1rem; }
+
+.metrics { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 48px; margin: 0; }
+.metrics div { display: grid; grid-template-columns: 7.5rem minmax(0, 1fr); gap: 16px; padding-block: 18px; border-top: 1px solid var(--line); align-items: baseline; }
+.metrics dt { font: 500 1.05rem/1.2 var(--mono); color: var(--accent); }
+.metrics dd { margin: 0; color: var(--muted); }
+
+/* Contact */
+.contact { background: var(--accent); color: var(--on-accent); border-top: 0; }
+.contact .grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 48px; align-items: start; }
+.contact h2 { font-size: clamp(2.2rem, 5.4vw, 3.8rem); }
+.contact p { margin: 0 0 12px; max-width: 26em; opacity: .9; }
+form { display: grid; gap: 14px; }
+label { display: grid; gap: 6px; font-weight: 600; font-size: 0.92rem; }
+input, textarea {
+  font: 400 1rem/1.4 var(--body); color: var(--fg); background: var(--surface);
+  border: 2px solid transparent; border-radius: 12px; padding: 13px 14px; width: 100%;
+}
+input:focus-visible, textarea:focus-visible { outline: 0; border-color: var(--mark); }
+textarea { min-height: 120px; resize: vertical; }
+.contact .btn { background: var(--mark); color: var(--on-mark); justify-self: start; }
+.status { margin: 0; font-weight: 600; }
+
+footer { padding-block: 28px; color: var(--muted); font-size: 0.92rem; display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+
+@media (max-width: 860px) {
+  .hero { grid-template-columns: minmax(0, 1fr); padding-block: 24px 56px; }
+  .zfig svg { max-width: 320px; margin-inline: 0; }
+  .steps { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .contact .grid { grid-template-columns: minmax(0, 1fr); gap: 28px; }
+  section { padding-block: 56px; }
+}
+@media (max-width: 600px) {
+  .services li { grid-template-columns: minmax(0, 1fr); }
+  .metrics { grid-template-columns: minmax(0, 1fr); }
+  .steps { grid-template-columns: minmax(0, 1fr); }
+  .nav a:not(.btn) { display: none; }
+}
+</style>
+<!--BODY-->
+<header class="wrap top">
+  <a class="logo" href="#top" aria-label="Zalf, acasă">Zalf<span>.</span></a>
+  <nav class="nav" aria-label="Navigare principală">
+    <a href="#servicii">Servicii</a>
+    <a href="#proces">Cum lucrăm</a>
+    <a href="#cifre">Ce măsurăm</a>
+    <a class="btn" href="#contact">Cere o ofertă</a>
+  </nav>
+</header>
+
+<main id="top">
+  <div class="wrap hero">
+    <div>
+      <p class="eyebrow">Agenție de marketing</p>
+      <h1>Facem brandul tău <mark>greu de ignorat</mark>.</h1>
+      <p class="lead">Zalf construiește strategie, conținut și campanii plătite pentru afaceri care vor mai mulți clienți. Apoi măsurăm fiecare leu cheltuit.</p>
+      <div class="cta-row">
+        <a class="btn" href="#contact">Cere o ofertă</a>
+        <a class="link" href="#servicii">Vezi ce facem</a>
+      </div>
+    </div>
+    <figure class="zfig">
+      <svg viewBox="0 0 420 420" role="img" aria-label="Litera Z desenată ca un traseu în patru pași: audit, strategie, execuție, măsurare">
+        <polyline class="zline" points="70,95 350,95 70,325 350,325"/>
+        <g>
+          <circle class="zdot" cx="70" cy="95" r="19"/><text class="znum" x="70" y="100" text-anchor="middle">1</text>
+          <circle class="zdot" cx="350" cy="95" r="19"/><text class="znum" x="350" y="100" text-anchor="middle">2</text>
+          <circle class="zdot" cx="70" cy="325" r="19"/><text class="znum" x="70" y="330" text-anchor="middle">3</text>
+          <circle class="zdot" cx="350" cy="325" r="19"/><text class="znum" x="350" y="330" text-anchor="middle">4</text>
+        </g>
+        <text class="zlabel" x="50" y="52">Audit</text>
+        <text class="zlabel" x="370" y="52" text-anchor="end">Strategie</text>
+        <text class="zlabel" x="50" y="382">Execuție</text>
+        <text class="zlabel" x="370" y="382" text-anchor="end">Măsurare</text>
+      </svg>
+    </figure>
+  </div>
+
+  <section id="servicii">
+    <div class="wrap">
+      <h2>Servicii</h2>
+      <p class="sub">Poți lucra cu noi pe un singur canal sau ne poți lăsa tot marketingul. Alegem împreună ce are sens pentru bugetul tău.</p>
+      <ul class="services">
+        <li><h3>Strategie și brand</h3><p>Poziționare, public țintă, mesaje și un plan pe canale, cu obiective pe care le putem verifica lună de lună.</p></li>
+        <li><h3>Social media</h3><p>Calendar editorial, postări, reels și stories, plus răspunsuri la comentarii și mesaje pe Instagram, Facebook, TikTok și LinkedIn.</p></li>
+        <li><h3>Reclame plătite</h3><p>Campanii Meta Ads, Google Ads și TikTok Ads: structură, creative, testare și optimizare continuă a bugetului.</p></li>
+        <li><h3>Conținut foto și video</h3><p>Ședințe foto, filmări scurte, montaj și texte scrise pentru oameni, adaptate fiecărei platforme.</p></li>
+        <li><h3>SEO</h3><p>Audit tehnic, cercetare de cuvinte cheie și articole care aduc trafic din Google fără să plătești pe click.</p></li>
+        <li><h3>Email marketing</h3><p>Newslettere și fluxuri automate care readuc clienții existenți: bun venit, coș abandonat, reactivare.</p></li>
+        <li><h3>Site-uri și landing page-uri</h3><p>Pagini rapide, clare, construite în jurul unei singure acțiuni: comandă, programare sau cerere de ofertă.</p></li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="proces">
+    <div class="wrap">
+      <h2>Cum lucrăm</h2>
+      <p class="sub">Patru pași, în ordinea asta, pe care îi reluăm cu fiecare campanie.</p>
+      <ol class="steps">
+        <li><span class="n">1</span><h3>Audit</h3><p>Ne uităm la ce ai acum: conturi, site, reclame, concurență. Îți spunem ce merge și ce pierde bani.</p></li>
+        <li><span class="n">2</span><h3>Strategie</h3><p>Stabilim obiective, buget și canale. Primești un plan scris, cu termene și responsabilități.</p></li>
+        <li><span class="n">3</span><h3>Execuție</h3><p>Producem conținutul, lansăm campaniile și ajustăm săptămânal în funcție de rezultate.</p></li>
+        <li><span class="n">4</span><h3>Măsurare</h3><p>Raport lunar pe înțelesul tuturor: cât ai investit, ce a adus și ce schimbăm luna următoare.</p></li>
+      </ol>
+    </div>
+  </section>
+
+  <section id="cifre">
+    <div class="wrap">
+      <h2>Ce măsurăm</h2>
+      <p class="sub">Like-urile sunt plăcute, dar nu plătesc facturi. Rapoartele noastre pornesc de la cifrele care țin de vânzări.</p>
+      <dl class="metrics">
+        <div><dt>ROAS</dt><dd>Câți lei încasezi pentru fiecare leu investit în reclame.</dd></div>
+        <div><dt>CAC</dt><dd>Cât te costă, în total, să câștigi un client nou.</dd></div>
+        <div><dt>CTR</dt><dd>Câți dintre cei care văd reclama dau click pe ea.</dd></div>
+        <div><dt>Conversie</dt><dd>Câți vizitatori ajung să cumpere sau să te contacteze.</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <section class="contact" id="contact">
+    <div class="wrap grid">
+      <div>
+        <h2>Hai să vorbim.</h2>
+        <p>Spune-ne pe scurt ce vinzi și ce vrei să obții. Revenim cu întrebări și o propunere de plan.</p>
+      </div>
+      <form id="contact-form" novalidate>
+        <label for="f-name">Nume
+          <input id="f-name" name="name" type="text" autocomplete="name" required>
+        </label>
+        <label for="f-email">E-mail
+          <input id="f-email" name="email" type="email" autocomplete="email" required>
+        </label>
+        <label for="f-msg">Despre proiect
+          <textarea id="f-msg" name="message" required></textarea>
+        </label>
+        <button class="btn" type="submit">Trimite mesajul</button>
+        <p class="status" id="form-status" role="status" hidden></p>
+      </form>
+    </div>
+  </section>
+</main>
+
+<footer class="wrap">
+  <span>© 2026 Zalf. Toate drepturile rezervate.</span>
+  <span>Agenție de marketing</span>
+</footer>
+
+<script>
+(function () {
+  var form = document.getElementById('contact-form');
+  var status = document.getElementById('form-status');
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var missing = !form.name.value.trim() || !form.message.value.trim() || !/^\S+@\S+\.\S+$/.test(form.email.value.trim());
+    status.hidden = false;
+    // TODO: conectează formularul la un serviciu de e-mail (ex. Formspree, Netlify Forms) sau la un backend propriu.
+    status.textContent = missing
+      ? 'Completează numele, un e-mail valid și câteva cuvinte despre proiect.'
+      : 'Formularul nu este încă legat la o adresă de e-mail, așa că mesajul nu a fost trimis.';
+  });
+})();
+</script>
