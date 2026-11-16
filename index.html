@@ -6,21 +6,19 @@
 <title>Zalf</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <meta name="description" content="Zalf este o agenție de marketing: strategie, conținut și reclame care vând. Laugh. Post. Sell.">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Unbounded:wght@400;500;600&family=Instrument+Sans:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Unbounded:wght@400;500;600;700&display=swap">
 <style>
-/* Layout: the agency's own poster as a page. White studio wall, red poster type set edge to edge, the team photo between the lines. Single light look by choice. */
+/* Layout: the agency's own poster as a page. White studio wall, red poster type set edge to edge, the team photo between the lines. All copy is set like their posts: wide caps with red letters. Single light look by choice. */
 :root {
   --bg: #F2F2F2;      /* studio wall */
   --paper: #FFFFFF;   /* A4 sheets on the floor */
   --ink: #121212;
-  --muted: #565656;
   --line: #D6D6D6;
   --red: #E03A2A;     /* logo red */
   --on-red: #FFFFFF;
 
   --poster: "Anton", "Impact", "Arial Narrow", sans-serif;
   --wide: "Unbounded", "Arial Black", Arial, sans-serif;
-  --body: "Instrument Sans", "Segoe UI", Helvetica, Arial, sans-serif;
 
   --wrap: 1160px;
   color-scheme: light;
@@ -32,11 +30,15 @@ body {
   margin: 0;
   background: var(--bg);
   color: var(--ink);
-  font: 400 1.0625rem/1.6 var(--body);
+  font: 500 1rem/1.4 var(--wide);
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
   -webkit-font-smoothing: antialiased;
 }
 a { color: inherit; }
+b, .r { font-weight: inherit; color: var(--red); }
 :focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 
 .wrap {
   max-width: var(--wrap);
@@ -44,30 +46,28 @@ a { color: inherit; }
   padding-left: max(20px, env(safe-area-inset-left, 0px));
   padding-right: max(20px, env(safe-area-inset-right, 0px));
 }
-.label { font: 500 0.78rem/1.2 var(--wide); letter-spacing: 0.02em; text-transform: uppercase; }
 
 /* Header */
 .top { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-block: 14px; }
 .logo { display: block; line-height: 0; }
 .logo img { height: 76px; width: auto; mix-blend-mode: multiply; }
-.nav { display: flex; align-items: center; gap: 6px 28px; flex-wrap: wrap; justify-content: flex-end; }
+.nav { display: flex; align-items: center; gap: 6px 28px; flex-wrap: wrap; justify-content: flex-end; font-size: 0.8rem; }
 .nav a { text-decoration: none; }
 .nav a:not(.btn):hover { color: var(--red); }
 
 .btn {
   display: inline-block; border: 0; cursor: pointer;
   background: var(--red); color: var(--on-red);
-  font: 500 0.78rem/1 var(--wide); text-transform: uppercase; letter-spacing: 0.02em; text-decoration: none;
-  padding: 16px 22px; border-radius: 0;
-  transition: background .15s ease;
+  font: 600 0.85rem/1 var(--wide); text-transform: uppercase; letter-spacing: -0.01em; text-decoration: none;
+  padding: 18px 24px; border-radius: 0;
+  transition: background .15s ease, color .15s ease;
 }
 .btn:hover { background: var(--ink); }
 
 /* Hero poster */
 .hero { padding-block: 10px 72px; }
-.hero-labels { display: flex; justify-content: space-between; gap: 12px; color: var(--red); font: 500 clamp(0.8rem, 2.1vw, 1.5rem)/1 var(--wide); text-transform: uppercase; letter-spacing: -0.02em; margin: 0 0 8px; padding: 0; list-style: none; }
-h1 { margin: 0; font: 400 1rem/1 var(--poster); color: var(--red); text-transform: uppercase; }
-.fit { display: block; white-space: nowrap; line-height: 0.86; overflow: hidden; }
+.hero-labels { display: flex; justify-content: space-between; gap: 12px; color: var(--red); font-size: clamp(0.8rem, 2.1vw, 1.5rem); line-height: 1; margin: 0 0 8px; padding: 0; list-style: none; }
+.fit { display: block; white-space: nowrap; overflow: hidden; margin: 0; font: 400 1rem/0.86 var(--poster); letter-spacing: 0; color: var(--red); }
 .fit > span { display: inline-block; }
 .fit-a { font-size: 30vw; }   /* fallbacks until the script fits each line to the column */
 .fit-b { font-size: 19vw; }
@@ -80,63 +80,76 @@ h1 { margin: 0; font: 400 1rem/1 var(--poster); color: var(--red); text-transfor
           mask-image: linear-gradient(to right, transparent, #000 10%, #000 90%, transparent);
 }
 .hero-copy { padding-bottom: 13%; }
-.lead { font-size: 1.15rem; margin: 0 0 26px; max-width: 22em; }
+.lead { font-size: clamp(1.1rem, 1.9vw, 1.45rem); font-weight: 600; line-height: 1.2; margin: 0 0 26px; }
 .sheets { display: grid; gap: 18px; justify-items: end; padding-bottom: 13%; }
 .sheet {
   background: var(--paper); color: var(--ink);
-  font: 600 0.82rem/1.25 var(--wide); text-transform: uppercase; text-align: center;
+  font-size: 0.82rem; font-weight: 600; line-height: 1.25; text-align: center;
   width: min(100%, 230px); padding: 34px 18px; margin: 0;
   box-shadow: 0 1px 0 var(--line), 0 14px 26px -18px rgba(18, 18, 18, .45);
 }
-.sheet small { display: block; font: 400 0.6rem/1.3 var(--wide); margin-top: 8px; }
+.sheet small { display: block; font-size: 0.6rem; font-weight: 400; margin-top: 8px; }
 .sheet:nth-child(1) { transform: rotate(-5deg); }
 .sheet:nth-child(2) { transform: rotate(4deg) translateX(-18px); }
 
 /* Sections */
 section { padding-block: 76px; border-top: 1px solid var(--line); }
-h2 { font: 400 clamp(3rem, 9vw, 6.6rem)/0.9 var(--poster); text-transform: uppercase; color: var(--red); margin: 0 0 28px; text-wrap: balance; }
-.sub { color: var(--muted); max-width: 36em; margin: 0 0 40px; }
+h2 { font: 400 clamp(3rem, 9vw, 6.6rem)/0.9 var(--poster); letter-spacing: 0; color: var(--red); margin: 0 0 28px; text-wrap: balance; }
+.sub { font-size: clamp(1.05rem, 2vw, 1.5rem); font-weight: 600; line-height: 1.2; max-width: 26em; margin: 0 0 44px; }
 
 .do { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: 48px; align-items: center; }
-.checks { list-style: none; margin: 0; padding: 0; display: grid; gap: 26px; }
-.checks li { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 4px 14px; }
-.checks .tick { font: 500 1.3rem/1.15 var(--wide); }
-.checks h3 { font: 500 clamp(1rem, 2.2vw, 1.4rem)/1.15 var(--wide); text-transform: uppercase; letter-spacing: -0.03em; margin: 0; }
-.checks h3 b { font-weight: inherit; color: var(--red); }
-.checks p { grid-column: 2; margin: 0; color: var(--muted); max-width: 30em; }
+.checks { list-style: none; margin: 0; padding: 0; display: grid; gap: 30px; }
+.checks li { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 6px 14px; }
+.checks .tick { font-size: 1.5rem; line-height: 1.1; }
+.checks h3 { font: inherit; font-size: clamp(1.15rem, 2.5vw, 1.7rem); line-height: 1.1; letter-spacing: -0.04em; margin: 0; }
+.checks p { grid-column: 2; margin: 0; font-size: 0.92rem; font-weight: 400; max-width: 30em; }
 .do figure { margin: 0; }
 .do img { display: block; width: 100%; height: auto; mix-blend-mode: multiply; }
 
+/* Clients */
+.clients { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 28px; }
+.clients li {
+  background: var(--paper); display: grid; place-items: center; padding: 36px 28px; min-height: 210px;
+  box-shadow: 0 1px 0 var(--line), 0 14px 26px -18px rgba(18, 18, 18, .45);
+}
+.clients li:nth-child(1) { transform: rotate(-2deg); }
+.clients li:nth-child(2) { transform: rotate(1.5deg); }
+.clients li:nth-child(3) { transform: rotate(-1deg); }
+.clients img { display: block; max-width: 100%; max-height: 130px; width: auto; height: auto; object-fit: contain; }
+
 .services { list-style: none; margin: 0; padding: 0; }
-.services li { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr); gap: 8px 32px; padding-block: 22px; border-top: 1px solid var(--ink); align-items: baseline; }
-.services li:last-child { border-bottom: 1px solid var(--ink); }
-.services h3 { font: 500 1.05rem/1.2 var(--wide); text-transform: uppercase; letter-spacing: -0.02em; margin: 0; }
-.services p { margin: 0; color: var(--muted); }
+.services li { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: 8px 32px; padding-block: 22px; border-top: 2px solid var(--ink); align-items: center; }
+.services li:last-child { border-bottom: 2px solid var(--ink); }
+.services h3 { font: 400 clamp(2rem, 4.6vw, 3.4rem)/0.95 var(--poster); letter-spacing: 0; margin: 0; }
+.services li:hover h3 { color: var(--red); }
+.services p { margin: 0; font-size: 0.98rem; }
 
 .steps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 28px; }
-.steps .n { display: block; font: 400 4.2rem/0.9 var(--poster); color: var(--red); margin-bottom: 12px; }
-.steps h3 { font: 500 0.95rem/1.2 var(--wide); text-transform: uppercase; margin: 0 0 8px; }
-.steps p { margin: 0; color: var(--muted); font-size: 1rem; }
+.steps .n { display: block; font: 400 5.4rem/0.9 var(--poster); letter-spacing: 0; color: var(--red); margin-bottom: 12px; }
+.steps h3 { font: inherit; font-size: 1.2rem; font-weight: 700; margin: 0 0 8px; }
+.steps p { margin: 0; font-size: 0.86rem; font-weight: 400; }
 
 /* Contact */
 .contact { background: var(--red); color: var(--on-red); border-top: 0; }
 .contact .grid { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 48px; align-items: start; }
 .contact h2 { color: var(--on-red); }
-.contact p { margin: 0; max-width: 26em; }
+.contact p { margin: 0 0 24px; font-size: 1.1rem; font-weight: 600; line-height: 1.25; max-width: 22em; }
+.contact .btn { background: var(--ink); color: var(--on-red); justify-self: start; }
+.contact .btn:hover { background: var(--paper); color: var(--ink); }
+.contact .btn.ghost { background: var(--paper); color: var(--ink); }
+.contact .btn.ghost:hover { background: var(--ink); color: var(--on-red); }
 form { display: grid; gap: 14px; }
-label { display: grid; gap: 7px; font: 500 0.7rem/1.2 var(--wide); text-transform: uppercase; }
+label { display: grid; gap: 7px; font-size: 0.8rem; font-weight: 600; }
 input, textarea {
-  font: 400 1rem/1.4 var(--body); color: var(--ink); background: var(--paper);
+  font: 500 1rem/1.4 var(--wide); letter-spacing: -0.02em; color: var(--ink); background: var(--paper);
   border: 2px solid var(--paper); border-radius: 0; padding: 13px 14px; width: 100%;
 }
 input:focus-visible, textarea:focus-visible { outline: 0; border-color: var(--ink); }
 textarea { min-height: 120px; resize: vertical; }
-.contact .btn { background: var(--ink); color: var(--on-red); justify-self: start; }
-.contact .btn:hover { background: var(--paper); color: var(--ink); }
-.status { margin: 0; font-weight: 600; }
+.status { margin: 0; font-size: 0.9rem; }
 
-footer { padding-block: 26px; color: var(--muted); display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
-footer .label { font-size: 0.66rem; }
+footer { padding-block: 26px; display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; font-size: 0.75rem; }
+footer a:hover { color: var(--red); }
 
 @media (max-width: 900px) {
   .hero-mid { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 24px; margin-block: 0; align-items: start; }
@@ -153,6 +166,8 @@ footer .label { font-size: 0.66rem; }
   .sheets { grid-template-columns: repeat(2, minmax(0, 1fr)); justify-items: center; gap: 10px; }
   .sheet { padding: 24px 10px; font-size: 0.68rem; }
   .sheet:nth-child(2) { transform: rotate(4deg); }
+  .clients { grid-template-columns: minmax(0, 1fr); gap: 22px; }
+  .clients li { min-height: 170px; }
   .services li { grid-template-columns: minmax(0, 1fr); }
   .steps { grid-template-columns: minmax(0, 1fr); }
   .nav a:not(.btn) { display: none; }
@@ -163,34 +178,34 @@ footer .label { font-size: 0.66rem; }
 <body>
 <header class="wrap top">
   <a class="logo" href="#top" aria-label="Zalf, acasă"><img src="assets/logo.png" alt="Zalf" width="310" height="450"></a>
-  <nav class="nav label" aria-label="Navigare principală">
+  <nav class="nav" aria-label="Navigare principală">
     <a href="#ce-facem">Ce facem</a>
+    <a href="#clienti">Clienți</a>
     <a href="#servicii">Servicii</a>
-    <a href="#proces">Cum lucrăm</a>
+    <a href="https://www.tiktok.com/@zalfpeople" target="_blank" rel="noopener">TikTok ↗</a>
     <a class="btn" href="#contact">Hai să vorbim</a>
   </nav>
 </header>
 
 <main id="top">
   <div class="wrap hero">
+    <h1 class="sr">Zalf, agenție de marketing. What we actually do.</h1>
     <ul class="hero-labels" aria-label="Laugh, post, sell">
       <li>Laugh</li><li>Post</li><li>Sell</li>
     </ul>
-    <h1>
-      <span class="fit fit-a"><span>What we</span></span>
-      <span class="hero-mid">
-        <span class="hero-copy">
-          <span class="lead" style="display:block;font:400 1.15rem/1.6 var(--body);color:var(--ink);text-transform:none">Zalf e o agenție de marketing. Râdem mult, postăm des și vindem pentru clienții noștri. În ordinea asta, dar cu accent pe ultima.</span>
-          <a class="btn" href="#contact">Vreau o ofertă</a>
-        </span>
-        <span class="hero-photo"><img src="assets/team.jpg" alt="Echipa Zalf în studio, în costume negre, cu schiuri, snowboard și ochelari de schi" width="988" height="1305"></span>
-        <span class="sheets" aria-hidden="true">
-          <span class="sheet">You look like our next client</span>
-          <span class="sheet">We have an announcement<small>We're not ready to announce it</small></span>
-        </span>
-      </span>
-      <span class="fit fit-b hero-b"><span>Actually do</span></span>
-    </h1>
+    <p class="fit fit-a" aria-hidden="true"><span>What we</span></p>
+    <div class="hero-mid">
+      <div class="hero-copy">
+        <p class="lead">Agenție de marketing. Râdem mult, postăm des și <b>vindem</b> pentru clienții noștri.</p>
+        <a class="btn" href="#contact">Vreau o ofertă</a>
+      </div>
+      <figure class="hero-photo"><img src="assets/team.jpg" alt="Echipa Zalf în studio, în costume negre, cu schiuri, snowboard și ochelari de schi" width="988" height="1305"></figure>
+      <div class="sheets" aria-hidden="true">
+        <p class="sheet">You look like our next client</p>
+        <p class="sheet">We have an announcement<small>We're not ready to announce it</small></p>
+      </div>
+    </div>
+    <p class="fit fit-b hero-b" aria-hidden="true"><span>Actually do</span></p>
   </div>
 
   <section id="ce-facem">
@@ -198,26 +213,38 @@ footer .label { font-size: 0.66rem; }
       <div>
         <h2>Uite ce facem</h2>
         <ul class="checks">
-          <li><span class="tick" aria-hidden="true">✓</span><h3>Strategy that actually <b>w</b>orks</h3><p>Un plan scris, cu obiective, buget și canale. Îl verificăm lună de lună și îl schimbăm când cifrele o cer.</p></li>
-          <li><span class="tick" aria-hidden="true">✓</span><h3>Content that c<b>o</b>nverts</h3><p>Foto, video și texte făcute să oprească degetul din scroll și să ducă omul spre comandă.</p></li>
-          <li><span class="tick" aria-hidden="true">✓</span><h3>Ads that make sense</h3><p>Reclame plătite cu o logică pe care ți-o putem explica în două minute și cu rezultate pe care le vezi în vânzări.</p></li>
-          <li><span class="tick" aria-hidden="true">✓</span><h3>Brand gro<b>w</b>th, not just pretty posts</h3><p>Un feed frumos e plăcut. Noi lucrăm pentru un brand pe care lumea îl ține minte și de la care cumpără.</p></li>
+          <li><span class="tick" aria-hidden="true">✓</span><h3>Strategy that actually <b>w</b>orks</h3><p>Plan scris, cu obiective și buget. Îl verificăm lună de lună.</p></li>
+          <li><span class="tick" aria-hidden="true">✓</span><h3>Content that c<b>o</b>nverts</h3><p>Foto, video și texte care opresc scroll-ul și duc spre comandă.</p></li>
+          <li><span class="tick" aria-hidden="true">✓</span><h3>Ads that make sense</h3><p>Reclame cu o logică pe care ți-o explicăm în două minute.</p></li>
+          <li><span class="tick" aria-hidden="true">✓</span><h3>Brand gro<b>w</b>th, not just pretty posts</h3><p>Un brand pe care lumea îl ține minte și de la care cumpără.</p></li>
         </ul>
       </div>
       <figure><img src="assets/studio.jpg" alt="Trei membri ai echipei Zalf la o ședință foto, lângă un laptop cu sigla Zalf și un trepied" width="1100" height="1012"></figure>
     </div>
   </section>
 
+  <section id="clienti">
+    <div class="wrap">
+      <h2>Lucrăm cu</h2>
+      <p class="sub">Branduri care au arătat exact ca <b>next client</b>. Acum sunt clienți.</p>
+      <ul class="clients">
+        <li><img src="assets/client-every-can-counts.png" alt="Every Can Counts"></li>
+        <li><img src="assets/client-complice.png" alt="Complice.ro"></li>
+        <li><img src="assets/client-cashclub.png" alt="CashClub"></li>
+      </ul>
+    </div>
+  </section>
+
   <section id="servicii">
     <div class="wrap">
       <h2>Servicii</h2>
-      <p class="sub">Lucrăm pe un singur canal sau preluăm tot marketingul. Alegem împreună ce are sens pentru bugetul tău.</p>
+      <p class="sub">Un singur canal sau <b>tot</b> marketingul. Alegem împreună ce are sens pentru bugetul tău.</p>
       <ul class="services">
-        <li><h3>Strategie și brand</h3><p>Poziționare, public țintă, ton și mesaje. Baza pe care stă tot restul.</p></li>
-        <li><h3>Social media</h3><p>Calendar editorial, postări, reels și stories pe Instagram, Facebook, TikTok și LinkedIn, plus răspunsuri la comentarii și mesaje.</p></li>
-        <li><h3>Conținut foto și video</h3><p>Ședințe foto, filmări, montaj și copy. Venim cu ideea, cu trepiedul și cu recuzita.</p></li>
-        <li><h3>Reclame plătite</h3><p>Campanii Meta Ads, Google Ads și TikTok Ads: structură, creative, testare și optimizare continuă.</p></li>
-        <li><h3>Site-uri și landing page-uri</h3><p>Pagini rapide și clare, construite în jurul unei singure acțiuni: comandă, programare sau cerere de ofertă.</p></li>
+        <li><h3>Strategie și brand</h3><p>Poziționare, public, ton și mesaje. <b>Baza</b> pe care stă tot restul.</p></li>
+        <li><h3>Social media</h3><p>Postări, reels și stories pe Instagram, <b>TikTok</b>, Facebook și LinkedIn.</p></li>
+        <li><h3>Foto și video</h3><p>Ședințe foto, filmări, montaj și copy. Venim cu <b>ideea</b>, trepiedul și recuzita.</p></li>
+        <li><h3>Reclame plătite</h3><p>Meta Ads, Google Ads și TikTok Ads. Testăm, măsurăm, <b>optimizăm</b>.</p></li>
+        <li><h3>Site-uri</h3><p>Pagini rapide, construite în jurul unei singure acțiuni: <b>comanda</b>.</p></li>
       </ul>
     </div>
   </section>
@@ -226,10 +253,10 @@ footer .label { font-size: 0.66rem; }
     <div class="wrap">
       <h2>Cum lucrăm</h2>
       <ol class="steps">
-        <li><span class="n">1</span><h3>Audit</h3><p>Ne uităm la ce ai acum: conturi, site, reclame, concurență. Îți spunem ce merge și ce pierde bani.</p></li>
-        <li><span class="n">2</span><h3>Strategie</h3><p>Stabilim obiective, buget și canale. Primești un plan scris, cu termene.</p></li>
-        <li><span class="n">3</span><h3>Execuție</h3><p>Filmăm, scriem, postăm, lansăm campaniile și ajustăm săptămânal.</p></li>
-        <li><span class="n">4</span><h3>Raport</h3><p>În fiecare lună: cât ai investit, ce a adus și ce schimbăm mai departe.</p></li>
+        <li><span class="n">1</span><h3>Audit</h3><p>Vedem ce merge și ce pierde bani.</p></li>
+        <li><span class="n">2</span><h3>Strategie</h3><p>Obiective, buget, canale. Plan scris.</p></li>
+        <li><span class="n">3</span><h3>Execuție</h3><p>Filmăm, scriem, postăm, lansăm.</p></li>
+        <li><span class="n">4</span><h3>Raport</h3><p>Cât ai investit și ce a adus. Lunar.</p></li>
       </ol>
     </div>
   </section>
@@ -238,7 +265,8 @@ footer .label { font-size: 0.66rem; }
     <div class="wrap grid">
       <div>
         <h2>You look like our next client</h2>
-        <p>Spune-ne pe scurt ce vinzi și ce vrei să obții. Revenim cu întrebări și cu o propunere.</p>
+        <p>Spune-ne ce vinzi și ce vrei să obții. Revenim cu o propunere.</p>
+        <a class="btn ghost" href="https://www.tiktok.com/@zalfpeople" target="_blank" rel="noopener">TikTok @zalfpeople ↗</a>
       </div>
       <form id="contact-form" novalidate>
         <label for="f-name">Nume
@@ -258,8 +286,9 @@ footer .label { font-size: 0.66rem; }
 </main>
 
 <footer class="wrap">
-  <span class="label">© 2026 Zalf</span>
-  <span class="label">Laugh · Post · Sell</span>
+  <span>© 2026 Zalf</span>
+  <a href="https://www.tiktok.com/@zalfpeople" target="_blank" rel="noopener">TikTok @zalfpeople</a>
+  <span>Laugh · Post · Sell</span>
 </footer>
 
 <script>
