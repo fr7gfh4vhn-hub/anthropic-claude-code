@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Zalf</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Zalf este o agenție de marketing: strategie, conținut și reclame care vând. Laugh. Post. Sell.">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Unbounded:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: the agency's own poster as a page. White studio wall, red poster type set edge to edge, the team photo between the lines. All copy is set like their posts: wide caps with red letters. Single light look by choice. */
+:root {
+  --bg: #F2F2F2;      /* studio wall */
+  --paper: #FFFFFF;   /* A4 sheets on the floor */
+  --ink: #121212;
+  --line: #D6D6D6;
+  --red: #E03A2A;     /* logo red */
+  --on-red: #FFFFFF;
+
+  --poster: "Anton", "Impact", "Arial Narrow", sans-serif;
+  --wide: "Unbounded", "Arial Black", Arial, sans-serif;
+
+  --wrap: 1160px;
+  color-scheme: light;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font: 500 1rem/1.4 var(--wide);
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  -webkit-font-smoothing: antialiased;
+}
+a { color: inherit; }
+b, .r { font-weight: inherit; color: var(--red); }
+:focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+
+.wrap {
+  max-width: var(--wrap);
+  margin-inline: auto;
+  padding-left: max(20px, env(safe-area-inset-left, 0px));
+  padding-right: max(20px, env(safe-area-inset-right, 0px));
+}
+
+/* Intro: red curtain flashes LAUGH / POST / SELL, then lifts to reveal the page. CSS only, so the page never depends on it. */
+.intro {
+  position: fixed; inset: 0; z-index: 100; background: var(--red); color: var(--on-red);
+  display: grid; place-items: center; cursor: pointer;
+  animation: intro-out .8s cubic-bezier(.75, 0, .2, 1) 2.75s forwards;
+}
+.intro::after { content: ""; position: absolute; left: 0; right: 0; top: 100%; height: 45vh; background: var(--red); }
+.intro-logo {
+  grid-area: 1 / 1; place-self: stretch; display: grid; place-items: center; background: var(--bg);
+  opacity: 0; animation: intro-last .01s linear 1.65s forwards;
+}
+.intro-logo img { height: min(46vh, 62vw); width: auto; mix-blend-mode: multiply; animation: intro-pop .55s cubic-bezier(.2, .9, .3, 1.25) 1.65s both; }
+@keyframes intro-pop { from { transform: scale(.75); } }
+.intro span { grid-area: 1 / 1; font: 400 min(34vw, 60vh)/1 var(--poster); letter-spacing: 0; opacity: 0; }
+.intro span:nth-child(1) { animation: intro-word .5s steps(1) .15s; }
+.intro span:nth-child(2) { animation: intro-word .5s steps(1) .65s; }
+.intro span:nth-child(3) { animation: intro-word .5s steps(1) 1.15s; }
+.intro.skip { animation-delay: 0s; }
+@keyframes intro-word { from { opacity: 1; } to { opacity: 0; } }
+@keyframes intro-last { to { opacity: 1; } }
+@keyframes intro-out { to { transform: translateY(calc(-100% - 45vh)); visibility: hidden; } }
+@media (prefers-reduced-motion: reduce) { .intro { display: none; } }
+
+/* Header */
+.top { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-block: 14px; }
+.logo { display: block; line-height: 0; }
+.logo img { height: 76px; width: auto; mix-blend-mode: multiply; }
+.nav { display: flex; align-items: center; gap: 6px 28px; flex-wrap: wrap; justify-content: flex-end; font-size: 0.8rem; }
+.nav a { text-decoration: none; }
+.nav a:not(.btn):hover { color: var(--red); }
+
+.btn {
+  display: inline-block; border: 0; cursor: pointer;
+  background: var(--red); color: var(--on-red);
+  font: 600 0.85rem/1 var(--wide); text-transform: uppercase; letter-spacing: -0.01em; text-decoration: none;
+  padding: 18px 24px; border-radius: 0;
+  transition: background .15s ease, color .15s ease;
+}
+.btn:hover { background: var(--ink); }
+
+/* Hero poster */
+.hero { padding-block: 10px 72px; }
+.hero-labels { display: flex; justify-content: space-between; gap: 12px; color: var(--red); font-size: clamp(0.8rem, 2.1vw, 1.5rem); line-height: 1; margin: 0 0 8px; padding: 0; list-style: none; }
+.fit { display: block; white-space: nowrap; overflow: hidden; margin: 0; font: 400 1rem/0.86 var(--poster); letter-spacing: 0; color: var(--red); }
+.fit > span { display: inline-block; }
+.fit-a { font-size: 30vw; }   /* fallbacks until the script fits each line to the column */
+.fit-b { font-size: 19vw; }
+
+.hero-mid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 440px) minmax(0, 1fr); gap: 36px; align-items: end; margin-block: -3.2% -2.2%; position: relative; }
+.hero-photo { margin: 0; }
+.hero-photo img {
+  display: block; width: 100%; height: auto; mix-blend-mode: multiply;
+}
+.hero-copy { padding-bottom: 13%; }
+.lead { font-size: clamp(1.1rem, 1.9vw, 1.45rem); font-weight: 600; line-height: 1.2; margin: 0 0 26px; }
+.sheets { display: grid; gap: 18px; justify-items: end; padding-bottom: 13%; }
+.sheet {
+  background: var(--paper); color: var(--ink);
+  font-size: 0.82rem; font-weight: 600; line-height: 1.25; text-align: center;
+  width: min(100%, 230px); padding: 34px 18px; margin: 0;
+  box-shadow: 0 1px 0 var(--line), 0 14px 26px -18px rgba(18, 18, 18, .45);
+}
+.sheet small { display: block; font-size: 0.6rem; font-weight: 400; margin-top: 8px; }
+.sheet:nth-child(1) { transform: rotate(-5deg); }
+.sheet:nth-child(2) { transform: rotate(4deg) translateX(-18px); }
+
+/* Sections */
+section { padding-block: 76px; border-top: 1px solid var(--line); }
+h2 { font: 400 clamp(3rem, 9vw, 6.6rem)/0.9 var(--poster); letter-spacing: 0; color: var(--red); margin: 0 0 28px; text-wrap: balance; }
+.sub { font-size: clamp(1.05rem, 2vw, 1.5rem); font-weight: 600; line-height: 1.2; max-width: 26em; margin: 0 0 44px; }
+
+.do { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: 48px; align-items: center; }
+.checks { list-style: none; margin: 0; padding: 0; display: grid; gap: 30px; }
+.checks li { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 6px 14px; }
+.checks .tick { font-size: 1.5rem; line-height: 1.1; }
+.checks h3 { font: inherit; font-size: clamp(1.15rem, 2.5vw, 1.7rem); line-height: 1.1; letter-spacing: -0.04em; margin: 0; }
+.checks p { grid-column: 2; margin: 0; font-size: 0.92rem; font-weight: 400; max-width: 30em; }
+.do figure { margin: 0; }
+.do img { display: block; width: 100%; height: auto; mix-blend-mode: multiply; }
+
+/* Clients */
+.clients { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 28px; }
+.clients { align-items: center; }
+.clients a { display: grid; place-items: center; padding: 16px; transition: transform .2s ease; }
+.clients a:hover { transform: scale(1.06) rotate(-2deg); }
+.clients img { display: block; max-width: 100%; max-height: 150px; width: auto; height: auto; object-fit: contain; mix-blend-mode: multiply; }
+.socials { display: flex; flex-wrap: wrap; gap: 12px; }
+
+/* Manifesto */
+.quotes { list-style: none; margin: 0 0 32px; padding: 0; }
+.quotes li { font-size: clamp(1.25rem, 2.9vw, 2rem); font-weight: 700; line-height: 1.12; letter-spacing: -0.04em; padding-block: 20px; border-top: 2px solid var(--ink); }
+.quotes li:last-child { border-bottom: 2px solid var(--ink); }
+
+.services { list-style: none; margin: 0; padding: 0; }
+.services li { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: 8px 32px; padding-block: 22px; border-top: 2px solid var(--ink); align-items: center; }
+.services li:last-child { border-bottom: 2px solid var(--ink); }
+.services h3 { font: 400 clamp(2rem, 4.6vw, 3.4rem)/0.95 var(--poster); letter-spacing: 0; margin: 0; }
+.services li:hover h3 { color: var(--red); }
+.services p { margin: 0; font-size: 0.98rem; }
+
+.steps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 28px; }
+.steps .n { display: block; font: 400 5.4rem/0.9 var(--poster); letter-spacing: 0; color: var(--red); margin-bottom: 12px; }
+.steps h3 { font: inherit; font-size: 1.2rem; font-weight: 700; margin: 0 0 8px; }
+.steps p { margin: 0; font-size: 0.86rem; font-weight: 400; }
+
+/* Contact */
+.contact { background: var(--red); color: var(--on-red); border-top: 0; }
+.contact .grid { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 48px; align-items: start; }
+.contact h2 { color: var(--on-red); }
+.contact p { margin: 0 0 24px; font-size: 1.1rem; font-weight: 600; line-height: 1.25; max-width: 22em; }
+.contact .btn { background: var(--ink); color: var(--on-red); justify-self: start; }
+.contact .btn:hover { background: var(--paper); color: var(--ink); }
+.contact .btn.ghost { background: var(--paper); color: var(--ink); }
+.contact .btn.ghost:hover { background: var(--ink); color: var(--on-red); }
+form { display: grid; gap: 14px; }
+label { display: grid; gap: 7px; font-size: 0.8rem; font-weight: 600; }
+input, textarea {
+  font: 500 1rem/1.4 var(--wide); letter-spacing: -0.02em; color: var(--ink); background: var(--paper);
+  border: 2px solid var(--paper); border-radius: 0; padding: 13px 14px; width: 100%;
+}
+input:focus-visible, textarea:focus-visible { outline: 0; border-color: var(--ink); }
+textarea { min-height: 120px; resize: vertical; }
+.status { margin: 0; font-size: 0.9rem; }
+
+footer { padding-block: 26px; display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; font-size: 0.75rem; }
+footer a:hover { color: var(--red); }
+
+/* Marquee strip */
+.marquee { background: var(--ink); color: var(--bg); overflow: hidden; padding-block: 14px; }
+.marquee-track { display: flex; width: max-content; animation: marquee 26s linear infinite; }
+.marquee-track span { font: 400 clamp(1.8rem, 4vw, 2.8rem)/1 var(--poster); letter-spacing: 0.02em; white-space: nowrap; padding-right: 0.6em; }
+.marquee-track b { padding-left: 0.6em; }
+@keyframes marquee { to { transform: translateX(-50%); } }
+
+/* Micro-interactions: transform and opacity only */
+.btn { transition: background .15s ease, color .15s ease, transform .2s cubic-bezier(.2, .8, .2, 1); }
+.btn:hover { transform: translateY(-2px); }
+.btn:active { transform: translateY(0) scale(.97); }
+.nav a:not(.btn) { padding-bottom: 4px; background: linear-gradient(currentColor, currentColor) 0 100% / 0 2px no-repeat; transition: background-size .25s ease, color .15s ease; }
+.nav a:not(.btn):hover { background-size: 100% 2px; }
+.logo img { transition: transform .35s cubic-bezier(.2, .8, .2, 1); }
+.logo:hover img { transform: rotate(-6deg) scale(1.05); }
+.services h3 { transition: transform .3s cubic-bezier(.2, .8, .2, 1), color .2s ease; }
+.services li:hover h3 { transform: translateX(12px); }
+.sheet { transition: transform .35s cubic-bezier(.2, .8, .2, 1); }
+.sheets .sheet:hover { transform: rotate(0deg) scale(1.05); }
+.do figure img { transition: transform .8s cubic-bezier(.2, .8, .2, 1); }
+.do figure:hover img { transform: scale(1.025); }
+.steps .n { transition: transform .3s cubic-bezier(.2, .8, .2, 1); transform-origin: left bottom; }
+.steps li:hover .n { transform: scale(1.12) rotate(-4deg); }
+input, textarea { transition: border-color .2s ease; }
+
+@media (prefers-reduced-motion: no-preference) {
+  /* Scroll reveal: the script adds .reveal only to elements still below the fold, so nothing is hidden without it. */
+  .reveal { opacity: 0; transform: translateY(26px); transition: opacity .7s cubic-bezier(.2, .7, .2, 1) var(--d, 0s), transform .7s cubic-bezier(.2, .7, .2, 1) var(--d, 0s); }
+  .reveal.in { opacity: 1; transform: none; }
+  /* Hero enters as the intro curtain lifts */
+  .fit > span { animation: rise .9s cubic-bezier(.2, .8, .2, 1) 2.95s both; }
+  .hero-mid { animation: fade-up .9s cubic-bezier(.2, .8, .2, 1) 3.1s backwards; } /* backwards only: a lingering fill would isolate the photo's multiply blend */
+  .intro.skip ~ main .fit > span { animation-delay: .25s; }
+  .intro.skip ~ main .hero-mid { animation-delay: .4s; }
+  .sheets .sheet:nth-child(1) { animation: float-a 6s ease-in-out infinite; }
+  .sheets .sheet:nth-child(2) { animation: float-b 7s ease-in-out infinite; }
+}
+@keyframes rise { from { transform: translateY(105%); } }
+@keyframes fade-up { from { opacity: 0; transform: translateY(20px); } }
+@keyframes float-a { 50% { translate: 0 -6px; } }
+@keyframes float-b { 50% { translate: 0 5px; } }
+@media (prefers-reduced-motion: reduce) { .marquee-track { animation: none; } }
+
+@media (max-width: 900px) {
+  .hero-mid { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 24px; margin-block: 0; align-items: start; }
+  .hero-photo { grid-column: 1 / -1; order: -1; width: 100%; max-width: 460px; margin: -3% auto 0; }
+  .hero-copy, .sheets { padding-bottom: 0; }
+  .hero-b { margin-top: 28px; }
+  .do { grid-template-columns: minmax(0, 1fr); }
+  .steps { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .contact .grid { grid-template-columns: minmax(0, 1fr); gap: 28px; }
+  section { padding-block: 56px; }
+}
+@media (max-width: 600px) {
+  .hero-mid { grid-template-columns: minmax(0, 1fr); }
+  .sheets { grid-template-columns: repeat(2, minmax(0, 1fr)); justify-items: center; gap: 10px; }
+  .sheet { padding: 24px 10px; font-size: 0.68rem; }
+  .sheet:nth-child(2) { transform: rotate(4deg); }
+  .clients { grid-template-columns: minmax(0, 1fr); gap: 22px; }
+  .services li { grid-template-columns: minmax(0, 1fr); }
+  .steps { grid-template-columns: minmax(0, 1fr); }
+  .nav a:not(.btn) { display: none; }
+  .logo img { height: 62px; }
+}
+</style>
+</head>
+<body>
+<div class="intro" id="intro" aria-hidden="true"><span>Laugh</span><span>Post</span><span>Sell</span><div class="intro-logo"><img src="assets/logo.png" alt="" width="310" height="450"></div></div>
+
+<header class="wrap top">
+  <a class="logo" href="#top" aria-label="Zalf, acasă"><img src="assets/logo.png" alt="Zalf" width="310" height="450"></a>
+  <nav class="nav" aria-label="Navigare principală">
+    <a href="#ce-facem">Ce facem</a>
+    <a href="#clienti">Clienți</a>
+    <a href="#servicii">Servicii</a>
+    <a href="https://www.instagram.com/zalf_people" target="_blank" rel="noopener">Instagram ↗</a>
+    <a href="https://www.tiktok.com/@zalfpeople" target="_blank" rel="noopener">TikTok ↗</a>
+    <a class="btn" href="#contact">Hai să vorbim</a>
+  </nav>
+</header>
+
+<main id="top">
+  <div class="wrap hero">
+    <h1 class="sr">Zalf, agenție de marketing. What we actually do.</h1>
+    <ul class="hero-labels" aria-label="Laugh, post, sell">
+      <li>Laugh</li><li>Post</li><li>Sell</li>
+    </ul>
+    <p class="fit fit-a" aria-hidden="true"><span>What we</span></p>
+    <div class="hero-mid">
+      <div class="hero-copy">
+        <p class="lead">Agenție de marketing. Râdem mult, postăm des și <b>vindem</b> pentru clienții noștri.</p>
+        <a class="btn" href="#contact">Vreau o ofertă</a>
+      </div>
+      <figure class="hero-photo"><img src="assets/team.jpg" alt="Echipa Zalf în studio, în costume negre, cu schiuri, snowboard și ochelari de schi" width="1000" height="1322"></figure>
+      <div class="sheets" aria-hidden="true">
+        <p class="sheet">You look like our next client</p>
+        <p class="sheet">We have an announcement<small>We're not ready to announce it</small></p>
+      </div>
+    </div>
+    <p class="fit fit-b hero-b" aria-hidden="true"><span>Actually do</span></p>
+  </div>
+
+  <section id="ce-facem">
+    <div class="wrap do">
+      <div>
+        <h2>Uite ce facem</h2>
+        <ul class="checks">
+          <li><span class="tick" aria-hidden="true">✓</span><h3>Strategy that actually <b>w</b>orks</h3><p>Plan scris, cu obiective și buget. Îl verificăm lună de lună.</p></li>
+          <li><span class="tick" aria-hidden="true">✓</span><h3>Content that c<b>o</b>nverts</h3><p>Foto, video și texte care opresc scroll-ul și duc spre comandă.</p></li>
+          <li><span class="tick" aria-hidden="true">✓</span><h3>Ads that make sense</h3><p>Reclame cu o logică pe care ți-o explicăm în două minute.</p></li>
+          <li><span class="tick" aria-hidden="true">✓</span><h3>Brand gro<b>w</b>th, not just pretty posts</h3><p>Un brand pe care lumea îl ține minte și de la care cumpără.</p></li>
+        </ul>
+      </div>
+      <figure><img src="assets/studio.jpg" alt="Trei membri ai echipei Zalf la o ședință foto, lângă un laptop cu sigla Zalf și un trepied" width="1100" height="1090"></figure>
+    </div>
+  </section>
+
+  <section id="cum-gandim">
+    <div class="wrap do">
+      <figure><img src="assets/inspiring.jpg" alt="Postare Zalf: Stop mirroring. Start inspiring. Trei membre ale echipei se fotografiază cu telefoanele." width="900" height="1189"></figure>
+      <div>
+        <h2>Cum gândim</h2>
+        <ul class="quotes">
+          <li>Construiește un <b>sistem</b>, nu o postare.</li>
+          <li>Alege <b>direcția</b>, nu trendul.</li>
+          <li>Când toată lumea e „real”, realul nu mai e <b>special</b>.</li>
+          <li>Aspirațional, dar cu mai multă <b>intenție</b>.</li>
+        </ul>
+        <a class="btn" href="https://www.instagram.com/zalf_people" target="_blank" rel="noopener">Vezi feed-ul ↗</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="clienti">
+    <div class="wrap">
+      <h2>Lucrăm cu</h2>
+      <p class="sub">Branduri care au arătat exact ca <b>next client</b>. Acum sunt clienți.</p>
+      <ul class="clients">
+        <li><a href="https://everycancounts.eu/ro/" target="_blank" rel="noopener"><img src="assets/client-every-can-counts.png" alt="Every Can Counts, deschide site-ul"></a></li>
+        <li><a href="https://complice.ro" target="_blank" rel="noopener"><img src="assets/client-complice.png" alt="Complice.ro, deschide site-ul"></a></li>
+        <li><a href="https://cashclub.ro" target="_blank" rel="noopener"><img src="assets/client-cashclub.png" alt="CashClub, deschide site-ul"></a></li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="servicii">
+    <div class="wrap">
+      <h2>Servicii</h2>
+      <p class="sub">Un singur canal sau <b>tot</b> marketingul. Alegem împreună ce are sens pentru bugetul tău.</p>
+      <ul class="services">
+        <li><h3>Strategie și brand</h3><p>Poziționare, public, ton și mesaje. <b>Baza</b> pe care stă tot restul.</p></li>
+        <li><h3>Social media</h3><p>Postări, reels și stories pe Instagram, <b>TikTok</b>, Facebook și LinkedIn.</p></li>
+        <li><h3>Foto și video</h3><p>Ședințe foto, filmări, montaj și copy. Venim cu <b>ideea</b>, trepiedul și recuzita.</p></li>
+        <li><h3>Reclame plătite</h3><p>Meta Ads, Google Ads și TikTok Ads. Testăm, măsurăm, <b>optimizăm</b>.</p></li>
+        <li><h3>Site-uri</h3><p>Pagini rapide, construite în jurul unei singure acțiuni: <b>comanda</b>.</p></li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="proces">
+    <div class="wrap">
+      <h2>Cum lucrăm</h2>
+      <ol class="steps">
+        <li><span class="n">1</span><h3>Audit</h3><p>Vedem ce merge și ce pierde bani.</p></li>
+        <li><span class="n">2</span><h3>Strategie</h3><p>Obiective, buget, canale. Plan scris.</p></li>
+        <li><span class="n">3</span><h3>Execuție</h3><p>Filmăm, scriem, postăm, lansăm.</p></li>
+        <li><span class="n">4</span><h3>Raport</h3><p>Cât ai investit și ce a adus. Lunar.</p></li>
+      </ol>
+    </div>
+  </section>
+
+  <div class="marquee" aria-hidden="true">
+    <div class="marquee-track">
+      <span>Laugh<b>·</b></span><span>Post<b>·</b></span><span>Sell<b>·</b></span><span>Laugh<b>·</b></span><span>Post<b>·</b></span><span>Sell<b>·</b></span><span>Laugh<b>·</b></span><span>Post<b>·</b></span><span>Sell<b>·</b></span><span>Laugh<b>·</b></span><span>Post<b>·</b></span><span>Sell<b>·</b></span>
+      <span>Laugh<b>·</b></span><span>Post<b>·</b></span><span>Sell<b>·</b></span><span>Laugh<b>·</b></span><span>Post<b>·</b></span><span>Sell<b>·</b></span><span>Laugh<b>·</b></span><span>Post<b>·</b></span><span>Sell<b>·</b></span><span>Laugh<b>·</b></span><span>Post<b>·</b></span><span>Sell<b>·</b></span>
+    </div>
+  </div>
+
+  <section class="contact" id="contact">
+    <div class="wrap grid">
+      <div>
+        <h2>You look like our next client</h2>
+        <p>Spune-ne ce vinzi și ce vrei să obții. Revenim cu o propunere.</p>
+        <div class="socials">
+          <a class="btn ghost" href="https://www.instagram.com/zalf_people" target="_blank" rel="noopener">Instagram ↗</a>
+          <a class="btn ghost" href="https://www.tiktok.com/@zalfpeople" target="_blank" rel="noopener">TikTok ↗</a>
+          <a class="btn ghost" href="https://www.linkedin.com/company/zalf-people" target="_blank" rel="noopener">LinkedIn ↗</a>
+          <a class="btn ghost" href="https://www.facebook.com/share/1QqTmUy8Uq/" target="_blank" rel="noopener">Facebook ↗</a>
+        </div>
+      </div>
+      <form id="contact-form" novalidate>
+        <label for="f-name">Nume
+          <input id="f-name" name="name" type="text" autocomplete="name" required>
+        </label>
+        <label for="f-email">E-mail
+          <input id="f-email" name="email" type="email" autocomplete="email" required>
+        </label>
+        <label for="f-msg">Despre proiect
+          <textarea id="f-msg" name="message" required></textarea>
+        </label>
+        <button class="btn" type="submit">Trimite mesajul</button>
+        <p class="status" id="form-status" role="status" hidden></p>
+      </form>
+    </div>
+  </section>
+</main>
+
+<footer class="wrap">
+  <span>© 2026 Zalf</span>
+  <a href="https://www.instagram.com/zalf_people" target="_blank" rel="noopener">Instagram</a>
+  <a href="https://www.tiktok.com/@zalfpeople" target="_blank" rel="noopener">TikTok</a>
+  <a href="https://www.linkedin.com/company/zalf-people" target="_blank" rel="noopener">LinkedIn</a>
+  <a href="https://www.facebook.com/share/1QqTmUy8Uq/" target="_blank" rel="noopener">Facebook</a>
+  <span>Laugh · Post · Sell</span>
+</footer>
+
+<script>
+(function () {
+  // Fit each poster line to the full column width, like the printed poster.
+  var lines = document.querySelectorAll('.fit');
+  function fit() {
+    lines.forEach(function (line) {
+      var inner = line.firstElementChild;
+      line.style.fontSize = '100px';
+      var w = inner.getBoundingClientRect().width;
+      if (w > 0) line.style.fontSize = (100 * line.clientWidth / w * 0.995) + 'px';
+    });
+  }
+  fit();
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(fit);
+  window.addEventListener('resize', fit);
+
+  // Scroll reveal, staggered per group. Only elements still below the fold are hidden.
+  var calm = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (!calm && 'IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); }
+      });
+    }, { rootMargin: '0px 0px -8% 0px' });
+    var seen = new Map();
+    document.querySelectorAll('section h2, .sub, .checks li, .quotes li, .clients li, .services li, .steps li, .do figure, .contact form, .contact p, .socials').forEach(function (el) {
+      if (el.getBoundingClientRect().top < window.innerHeight * 0.9) return;
+      var i = seen.get(el.parentNode) || 0;
+      seen.set(el.parentNode, i + 1);
+      el.style.setProperty('--d', Math.min(i, 5) * 0.08 + 's');
+      el.classList.add('reveal');
+      io.observe(el);
+    });
+  }
+
+  // A tap skips the intro.
+  var intro = document.getElementById('intro');
+  intro.addEventListener('click', function () { intro.classList.add('skip'); });
+
+  var form = document.getElementById('contact-form');
+  var status = document.getElementById('form-status');
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var missing = !form.name.value.trim() || !form.message.value.trim() || !/^\S+@\S+\.\S+$/.test(form.email.value.trim());
+    status.hidden = false;
+    // TODO: conectează formularul la un serviciu de e-mail (ex. Formspree, Netlify Forms) sau la un backend propriu.
+    status.textContent = missing
+      ? 'Completează numele, un e-mail valid și câteva cuvinte despre proiect.'
+      : 'Formularul nu este încă legat la o adresă de e-mail, așa că mesajul nu a fost trimis.';
+  });
+})();
+</script>
+</body>
+</html>
