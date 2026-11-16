@@ -98,13 +98,6 @@ h2 { font: 400 clamp(3rem, 9vw, 6.6rem)/0.9 var(--poster); letter-spacing: 0; co
 .checks p { grid-column: 2; margin: 0; font-size: 0.92rem; font-weight: 400; max-width: 30em; }
 .do figure { margin: 0; }
 .do img { display: block; width: 100%; height: auto; mix-blend-mode: multiply; }
-/* Photos dissolve into the wall: no visible edges or corners. */
-.hero-photo img, .do img {
-  -webkit-mask-image: linear-gradient(to right, transparent, #000 12%, #000 88%, transparent), linear-gradient(to bottom, transparent, #000 9%, #000 91%, transparent);
-          mask-image: linear-gradient(to right, transparent, #000 12%, #000 88%, transparent), linear-gradient(to bottom, transparent, #000 9%, #000 91%, transparent);
-  -webkit-mask-composite: source-in;
-          mask-composite: intersect;
-}
 
 /* Clients */
 .clients { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 28px; }
