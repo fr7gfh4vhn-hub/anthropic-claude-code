@@ -42,6 +42,22 @@ b, .r { font-weight: inherit; color: var(--red); }
   padding-right: max(20px, env(safe-area-inset-right, 0px));
 }
 
+/* Intro: red curtain flashes LAUGH / POST / SELL, then lifts to reveal the page. CSS only, so the page never depends on it. */
+.intro {
+  position: fixed; inset: 0; z-index: 100; background: var(--red); color: var(--on-red);
+  display: grid; place-items: center; overflow: hidden; cursor: pointer;
+  animation: intro-out .65s cubic-bezier(.75, 0, .2, 1) 1.75s forwards;
+}
+.intro span { grid-area: 1 / 1; font: 400 min(34vw, 60vh)/1 var(--poster); letter-spacing: 0; opacity: 0; }
+.intro span:nth-child(1) { animation: intro-word .5s steps(1) .15s; }
+.intro span:nth-child(2) { animation: intro-word .5s steps(1) .65s; }
+.intro span:nth-child(3) { animation: intro-last .01s linear 1.15s forwards; }
+.intro.skip { animation-delay: 0s; }
+@keyframes intro-word { from { opacity: 1; } to { opacity: 0; } }
+@keyframes intro-last { to { opacity: 1; } }
+@keyframes intro-out { to { transform: translateY(-100%); visibility: hidden; } }
+@media (prefers-reduced-motion: reduce) { .intro { display: none; } }
+
 /* Header */
 .top { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-block: 14px; }
 .logo { display: block; line-height: 0; }
@@ -169,6 +185,8 @@ footer a:hover { color: var(--red); }
 }
 </style>
 <!--BODY-->
+<div class="intro" id="intro" aria-hidden="true"><span>Laugh</span><span>Post</span><span>Sell</span></div>
+
 <header class="wrap top">
   <a class="logo" href="#top" aria-label="Zalf, acasă"><img src="assets/logo.png" alt="Zalf" width="310" height="450"></a>
   <nav class="nav" aria-label="Navigare principală">
@@ -324,6 +342,10 @@ footer a:hover { color: var(--red); }
   fit();
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(fit);
   window.addEventListener('resize', fit);
+
+  // A tap skips the intro.
+  var intro = document.getElementById('intro');
+  intro.addEventListener('click', function () { intro.classList.add('skip'); });
 
   var form = document.getElementById('contact-form');
   var status = document.getElementById('form-status');
