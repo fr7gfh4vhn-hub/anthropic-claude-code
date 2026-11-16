@@ -174,6 +174,48 @@ textarea { min-height: 120px; resize: vertical; }
 footer { padding-block: 26px; display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; font-size: 0.75rem; }
 footer a:hover { color: var(--red); }
 
+/* Disco balls: one canvas-drawn tile, repeated down the page as the body background */
+body { background-repeat: repeat-y; background-position: top center; background-size: 100% auto; }
+
+/* Portfolio labels */
+.clients a { gap: 14px; text-decoration: none; }
+.clients a span { font-size: 0.8rem; font-weight: 600; }
+.clients a:hover span { color: var(--red); }
+
+/* Team */
+.team { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 36px 28px; }
+.team li { text-align: center; }
+.team .face { display: block; width: 100%; max-width: 240px; aspect-ratio: 1; margin: 0 auto 18px; border-radius: 50%; overflow: hidden; background: var(--paper); box-shadow: 0 0 0 6px var(--paper), 0 18px 30px -20px rgba(18, 18, 18, .5); }
+.team .face img { display: block; width: 100%; height: 100%; object-fit: cover; transition: transform .6s cubic-bezier(.2, .8, .2, 1); }
+.team li:hover .face img { transform: scale(1.07); }
+.team .face.blank { display: grid; place-items: center; background: var(--red); color: var(--on-red); font: 400 clamp(3rem, 7vw, 5rem)/1 var(--poster); letter-spacing: 0; }
+.team h3 { font: inherit; font-size: 1rem; font-weight: 700; line-height: 1.2; margin: 0; }
+
+/* Packages */
+.packs { list-style: none; margin: 0 0 28px; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; align-items: stretch; }
+.pack { background: var(--paper); padding: 34px 26px; display: flex; flex-direction: column; gap: 18px; box-shadow: 0 1px 0 var(--line), 0 18px 30px -22px rgba(18, 18, 18, .5); }
+.pack h3 { font: 400 clamp(2.6rem, 5vw, 3.8rem)/0.9 var(--poster); letter-spacing: 0; color: var(--red); margin: 0; }
+.pack > p { margin: 0; font-size: 0.86rem; font-weight: 500; min-height: 3.6em; }
+.pack ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; flex: 1; align-content: start; }
+.pack ul li { display: grid; grid-template-columns: 2.4em minmax(0, 1fr); align-items: baseline; gap: 10px; font-size: 0.95rem; font-weight: 600; border-top: 2px solid currentColor; padding-top: 10px; }
+.pack ul b { font: 400 2.4rem/1 var(--poster); letter-spacing: 0; }
+.pack .btn { text-align: center; line-height: 1.25; }
+.pack.hot { background: var(--red); color: var(--on-red); }
+.pack.hot h3, .pack.hot ul b { color: var(--on-red); }
+.pack.hot .btn { background: var(--ink); }
+.pack.hot .btn:hover { background: var(--paper); color: var(--ink); }
+.packs-note { margin: 0; font-size: clamp(1rem, 2vw, 1.35rem); font-weight: 700; line-height: 1.2; }
+
+/* FAQ */
+.faq { border-bottom: 2px solid var(--ink); }
+.faq details { border-top: 2px solid var(--ink); }
+.faq summary { list-style: none; cursor: pointer; display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 16px; align-items: center; padding-block: 22px; font-size: clamp(1.05rem, 2.3vw, 1.5rem); font-weight: 700; line-height: 1.15; letter-spacing: -0.03em; }
+.faq summary::-webkit-details-marker { display: none; }
+.faq summary::after { content: "+"; font: 400 2.6rem/0.7 var(--poster); color: var(--red); transition: transform .3s cubic-bezier(.2, .8, .2, 1); }
+.faq details[open] summary::after { transform: rotate(45deg); }
+.faq summary:hover { color: var(--red); }
+.faq details p { margin: 0; padding-bottom: 24px; font-size: 0.95rem; font-weight: 500; max-width: 46em; }
+
 /* Marquee strip */
 .marquee { background: var(--ink); color: var(--bg); overflow: hidden; padding-block: 14px; }
 .marquee-track { display: flex; width: max-content; animation: marquee 26s linear infinite; }
@@ -224,6 +266,9 @@ input, textarea { transition: border-color .2s ease; }
   .hero-b { margin-top: 28px; }
   .do { grid-template-columns: minmax(0, 1fr); }
   .steps { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .team { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .packs { grid-template-columns: minmax(0, 1fr); }
+  .pack > p { min-height: 0; }
   .contact .grid { grid-template-columns: minmax(0, 1fr); gap: 28px; }
   section { padding-block: 56px; }
 }
@@ -246,11 +291,10 @@ input, textarea { transition: border-color .2s ease; }
 <header class="wrap top">
   <a class="logo" href="#top" aria-label="Zalf, acasă"><img src="assets/logo.png" alt="Zalf" width="310" height="450"></a>
   <nav class="nav" aria-label="Navigare principală">
-    <a href="#ce-facem">Ce facem</a>
-    <a href="#clienti">Clienți</a>
-    <a href="#servicii">Servicii</a>
-    <a href="https://www.instagram.com/zalf_people" target="_blank" rel="noopener">Instagram ↗</a>
-    <a href="https://www.tiktok.com/@zalfpeople" target="_blank" rel="noopener">TikTok ↗</a>
+    <a href="#portofoliu">Portofoliu</a>
+    <a href="#echipa">Echipa</a>
+    <a href="#pachete">Pachete</a>
+    <a href="#faq">Întrebări</a>
     <a class="btn" href="#contact">Hai să vorbim</a>
   </nav>
 </header>
@@ -307,14 +351,27 @@ input, textarea { transition: border-color .2s ease; }
     </div>
   </section>
 
-  <section id="clienti">
+  <section id="portofoliu">
     <div class="wrap">
-      <h2>Lucrăm cu</h2>
+      <h2>Portofoliu</h2>
       <p class="sub">Branduri care au arătat exact ca <b>next client</b>. Acum sunt clienți.</p>
       <ul class="clients">
-        <li><a href="https://everycancounts.eu/ro/" target="_blank" rel="noopener"><img src="assets/client-every-can-counts.png" alt="Every Can Counts, deschide site-ul"></a></li>
-        <li><a href="https://complice.ro" target="_blank" rel="noopener"><img src="assets/client-complice.png" alt="Complice.ro, deschide site-ul"></a></li>
-        <li><a href="https://cashclub.ro" target="_blank" rel="noopener"><img src="assets/client-cashclub.png" alt="CashClub, deschide site-ul"></a></li>
+        <li><a href="https://everycancounts.eu/ro/" target="_blank" rel="noopener"><img src="assets/client-every-can-counts.png" alt=""><span>Every Can Counts ↗</span></a></li>
+        <li><a href="https://complice.ro" target="_blank" rel="noopener"><img src="assets/client-complice.png" alt=""><span>Complice.ro ↗</span></a></li>
+        <li><a href="https://cashclub.ro" target="_blank" rel="noopener"><img src="assets/client-cashclub.png" alt=""><span>CashClub ↗</span></a></li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="echipa">
+    <div class="wrap">
+      <h2>Echipa</h2>
+      <p class="sub">Zalf <b>people</b>. Oamenii din spatele postărilor.</p>
+      <ul class="team">
+        <li><span class="face"><img src="assets/team-anca.jpg" alt="" width="440" height="440"></span><h3>Anca Popa</h3></li>
+        <li><span class="face"><img src="assets/team-miriam.jpg" alt="" width="440" height="440"></span><h3>Băciucă Ana-Maria Miriam</h3></li>
+        <li><span class="face"><img src="assets/team-georgiana.jpg" alt="" width="440" height="440"></span><h3>Atudorei Georgiana</h3></li>
+        <li><span class="face blank" aria-hidden="true">CL</span><h3>Cazan Leonard</h3></li>
       </ul>
     </div>
   </section>
@@ -333,6 +390,46 @@ input, textarea { transition: border-color .2s ease; }
     </div>
   </section>
 
+  <section id="pachete">
+    <div class="wrap">
+      <h2>Pachete</h2>
+      <p class="sub">Trei puncte de pornire, pe lună. Le <b>adaptăm</b> după brand.</p>
+      <ul class="packs">
+        <li class="pack">
+          <h3>Essential</h3>
+          <p>Un start solid pentru brandurile care intră pe social.</p>
+          <ul>
+            <li><b>4</b> postări statice</li>
+            <li><b>8</b> Reels / TikToks</li>
+            <li><b>12</b> Stories</li>
+          </ul>
+          <a class="btn" href="#contact" data-pack="Essential">Cere ofertă personalizată</a>
+        </li>
+        <li class="pack hot">
+          <h3>Signature</h3>
+          <p>Mai mult conținut, strategie mai clară, reach mai mare.</p>
+          <ul>
+            <li><b>6</b> postări statice</li>
+            <li><b>12</b> Reels / TikToks</li>
+            <li><b>16</b> Stories</li>
+          </ul>
+          <a class="btn" href="#contact" data-pack="Signature">Cere ofertă personalizată</a>
+        </li>
+        <li class="pack">
+          <h3>Signature+</h3>
+          <p>Pachetul complet pentru brandurile care vor să mergem all in.</p>
+          <ul>
+            <li><b>8</b> postări statice</li>
+            <li><b>16</b> Reels / TikToks</li>
+            <li><b>20</b> Stories</li>
+          </ul>
+          <a class="btn" href="#contact" data-pack="Signature+">Cere ofertă personalizată</a>
+        </li>
+      </ul>
+      <p class="packs-note">Toate pachetele pot fi adaptate în funcție de <b>brand</b> și <b>obiective</b>.</p>
+    </div>
+  </section>
+
   <section id="proces">
     <div class="wrap">
       <h2>Cum lucrăm</h2>
@@ -342,6 +439,30 @@ input, textarea { transition: border-color .2s ease; }
         <li><span class="n">3</span><h3>Execuție</h3><p>Filmăm, scriem, postăm, lansăm.</p></li>
         <li><span class="n">4</span><h3>Raport</h3><p>Cât ai investit și ce a adus. Lunar.</p></li>
       </ol>
+    </div>
+  </section>
+
+  <section id="faq">
+    <div class="wrap">
+      <h2>Întrebări frecvente</h2>
+      <div class="faq">
+        <details open>
+          <summary>Cum stabiliți prețurile?</summary>
+          <p>Ne uităm la ce ai nevoie, unde vrei să fii prezent și cât conținut are sens. Apoi facem o ofertă care se potrivește.</p>
+        </details>
+        <details>
+          <summary>Ce include managementul comunității?</summary>
+          <p>Urmărim comentariile, răspundem la mesaje și vorbim cu audiența ta ca pagina să pară vie.</p>
+        </details>
+        <details>
+          <summary>Există un contract minim?</summary>
+          <p>Depinde, durata contractului se stabilește în funcție de cât timp dorești să colaborăm, volumul de conținut, complexitatea proiectului și alți factori. Discutăm totul împreună și găsim formula potrivită pentru tine.</p>
+        </details>
+        <details>
+          <summary>Pot schimba pachetul mai târziu?</summary>
+          <p>Da. Brandul tău crește, pachetul crește. Simplu.</p>
+        </details>
+      </div>
     </div>
   </section>
 
@@ -415,7 +536,7 @@ input, textarea { transition: border-color .2s ease; }
       });
     }, { rootMargin: '0px 0px -8% 0px' });
     var seen = new Map();
-    document.querySelectorAll('section h2, .sub, .checks li, .quotes li, .clients li, .services li, .steps li, .do figure, .contact form, .contact p, .socials').forEach(function (el) {
+    document.querySelectorAll('section h2, .sub, .checks li, .quotes li, .clients li, .services li, .steps li, .do figure, .contact form, .contact p, .socials, .team li, .packs > li, .packs-note, .faq details').forEach(function (el) {
       if (el.getBoundingClientRect().top < window.innerHeight * 0.9) return;
       var i = seen.get(el.parentNode) || 0;
       seen.set(el.parentNode, i + 1);
@@ -424,6 +545,54 @@ input, textarea { transition: border-color .2s ease; }
       io.observe(el);
     });
   }
+
+  // Disco balls: draw one tile of mirror balls on a canvas and repeat it down the page.
+  (function () {
+    try {
+      var narrow = window.innerWidth < 700;
+      var W = narrow ? 600 : 1400, H = narrow ? 1500 : 1700, k = narrow ? 2 : 1;
+      var balls = narrow
+        ? [[70, 230, 150], [540, 560, 115], [300, 930, 58], [50, 1160, 125], [560, 1370, 165]]
+        : [[110, 280, 190], [1270, 190, 135], [1010, 650, 88], [330, 930, 68], [1340, 1160, 200], [150, 1450, 140], [730, 1540, 60]];
+      var c = document.createElement('canvas'); c.width = W * k; c.height = H * k;
+      var g = c.getContext('2d'); g.scale(k, k);
+      var seed = 7; function rnd() { seed = (seed * 16807) % 2147483647; return seed / 2147483647; }
+      balls.forEach(function (b) {
+        var cx = b[0], cy = b[1], r = b[2], N = Math.max(9, Math.round(r / 11));
+        g.globalAlpha = 0.5;
+        g.strokeStyle = '#BDBDBD'; g.lineWidth = 1.5;
+        g.beginPath(); g.moveTo(cx, cy - r - 14); g.lineTo(cx, cy - r - 150); g.stroke();
+        g.beginPath(); g.arc(cx, cy - r - 8, 7, 0, 7); g.stroke();
+        g.fillStyle = '#CFCFCF'; g.beginPath(); g.arc(cx, cy, r, 0, 7); g.fill();
+        for (var i = 0; i < N; i++) {
+          var la0 = -Math.PI / 2 + i * Math.PI / N, la1 = la0 + Math.PI / N, gap = Math.PI / N * 0.07;
+          var m = Math.max(4, Math.round(2 * N * Math.cos((la0 + la1) / 2))), off = rnd() * 6.28;
+          for (var j = 0; j < m; j++) {
+            var lo0 = off + j * 2 * Math.PI / m, lo1 = lo0 + 2 * Math.PI / m, lg = (lo1 - lo0) * 0.07;
+            var z = Math.cos((la0 + la1) / 2) * Math.cos((lo0 + lo1) / 2);
+            if (z <= 0.02) continue;
+            var v = 236 + rnd() * 19 - (1 - z) * 34; if (rnd() < 0.12) v -= 38;
+            v = Math.round(v); g.fillStyle = 'rgb(' + v + ',' + v + ',' + v + ')';
+            g.beginPath();
+            [[la0 + gap, lo0 + lg], [la0 + gap, lo1 - lg], [la1 - gap, lo1 - lg], [la1 - gap, lo0 + lg]].forEach(function (q, n) {
+              var x = cx + r * Math.cos(q[0]) * Math.sin(q[1]), y = cy + r * Math.sin(q[0]);
+              n ? g.lineTo(x, y) : g.moveTo(x, y);
+            });
+            g.closePath(); g.fill();
+          }
+        }
+      });
+      document.body.style.backgroundImage = 'url(' + c.toDataURL('image/png') + ')';
+    } catch (e) { /* decoration only */ }
+  })();
+
+  // A package button carries its name into the contact form.
+  document.querySelectorAll('[data-pack]').forEach(function (a) {
+    a.addEventListener('click', function () {
+      var box = document.getElementById('f-msg');
+      if (!box.value.trim() || /^Mă interesează pachetul /.test(box.value)) box.value = 'Mă interesează pachetul ' + a.getAttribute('data-pack') + '.';
+    });
+  });
 
   // A tap skips the intro.
   var intro = document.getElementById('intro');
