@@ -272,7 +272,7 @@ h2.statement { font: 800 clamp(1.7rem, 3.5vw, 2.7rem)/1.2 var(--text); text-tran
 .cards ul { list-style: none; margin: 10px 0 0; padding: 0; display: grid; gap: 6px; }
 .cards ul li { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 10px; font-weight: 700; }
 .cards ul li::before { content: ""; width: 9px; height: 9px; border-radius: 50%; background: var(--red); margin-top: .55em; transition: background .25s ease; }
-.cards .punch { margin-top: 14px; font-weight: 800; color: var(--red); transition: color .25s ease; }
+.cards .punch { display: block; margin-top: 10px; font-weight: 800; color: var(--red); transition: color .25s ease; }
 .cards > li:hover { background: var(--red); color: var(--on-red); transform: translateY(-6px) rotate(-1.2deg); }
 .cards > li:nth-child(even):hover { transform: translateY(-6px) rotate(1.2deg); }
 .cards > li:hover h3, .cards > li:hover .punch { color: var(--on-red); }
@@ -297,16 +297,6 @@ h2.statement { font: 800 clamp(1.7rem, 3.5vw, 2.7rem)/1.2 var(--text); text-tran
   .reveal.in .mark:nth-of-type(3) { transition-delay: .85s; }
 }
 @keyframes bob { 50% { transform: translateY(-4px) scale(1.08); } }
-
-/* Moodboard: black and white by default so it sits with the palette; colour comes in on hover or when centred on screen */
-.mood { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 22px; }
-.mood li { border-radius: 26px; overflow: hidden; box-shadow: 0 18px 30px -22px rgba(18, 18, 18, .55); transition: transform .5s cubic-bezier(.2, .8, .2, 1), opacity .7s ease; }
-.mood li:nth-child(odd) { rotate: -2deg; }
-.mood li:nth-child(even) { rotate: 2deg; translate: 0 18px; }
-.mood img { display: block; width: 100%; height: auto; filter: grayscale(1) contrast(1.08); transition: filter .6s ease, transform .8s cubic-bezier(.2, .8, .2, 1); }
-.mood li:hover img, .mood li.lit img { filter: none; transform: scale(1.06); }
-.mood li:hover { transform: translateY(-8px); }
-.mood-wrap { padding-block: 26px 44px; }
 
 .why-grid { display: grid; grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.4fr); gap: 48px; align-items: center; }
 .why-grid .why { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -394,8 +384,6 @@ input, textarea { transition: border-color .2s ease; }
   .why { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .why-grid { grid-template-columns: minmax(0, 1fr); gap: 32px; }
   .why-photo { max-width: 340px; }
-  .mood { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
-  .mood li:nth-child(even) { translate: 0 12px; }
   .packs { grid-template-columns: minmax(0, 1fr); }
   .pack > p { min-height: 0; }
   .contact .grid { grid-template-columns: minmax(0, 1fr); gap: 28px; }
@@ -447,7 +435,6 @@ input, textarea { transition: border-color .2s ease; }
       </div>
       <figure class="hero-photo"><img src="assets/team.jpg" alt="Echipa Zalf în studio, în costume negre, cu schiuri, snowboard și ochelari de schi" width="1000" height="1322"></figure>
       <div class="sheets">
-        <p class="sheet" aria-hidden="true">You look like our next client</p>
         <a class="badge" href="#contact" aria-label="Scrie-ne">
           <svg viewBox="0 0 200 200" aria-hidden="true">
             <circle cx="100" cy="100" r="100" fill="#E03A2A"/>
@@ -475,13 +462,13 @@ input, textarea { transition: border-color .2s ease; }
     <div class="wrap do">
       <div>
         <h2 class="statement">ZALF e o echipă de oameni care cred că marketingul poate fi <span class="mark">relaxat</span>, <span class="mark">smart</span> și <span class="mark">de ținut minte</span>.</h2>
-        <p class="about">Suntem o echipă tânără, dar cu pregătire serioasă în spate. Strategie, social media management și conținut, cu asta ne ocupăm zi de zi, cu metodă și un plan clar pentru fiecare brand. Și da, cele mai bune idei tot cu un martini în mână și un vibe bun în jur apar.</p>
+        <p class="about">Echipă tânără, cu pregătire serioasă în spate. Strategie, social media și conținut, cu un plan clar pentru fiecare brand. Și da, cele mai bune idei tot cu un martini în mână apar.</p>
         <h3 class="mini">Ce facem diferit:</h3>
         <ul class="checks plain">
-          <li><span class="tick" aria-hidden="true">✓</span><p>Facem conținut care rămâne cu oamenii</p></li>
-          <li><span class="tick" aria-hidden="true">✓</span><p>Îți construim prezența acolo unde contează și ai nevoie: TikTok, Instagram, Facebook, LinkedIn și Google</p></li>
-          <li><span class="tick" aria-hidden="true">✓</span><p>Gândim strategii personalizate pentru brandul tău, cu obiective clare și o direcție coerentă</p></li>
-          <li><span class="tick" aria-hidden="true">✓</span><p>Îți facem brandul vizibil, simplu și natural</p></li>
+          <li><span class="tick" aria-hidden="true">✓</span><p>Conținut care rămâne cu oamenii</p></li>
+          <li><span class="tick" aria-hidden="true">✓</span><p>Prezență acolo unde contează: TikTok, Instagram, Facebook, LinkedIn și Google</p></li>
+          <li><span class="tick" aria-hidden="true">✓</span><p>Strategii personalizate, cu obiective clare</p></li>
+          <li><span class="tick" aria-hidden="true">✓</span><p>Un brand vizibil, simplu și natural</p></li>
         </ul>
       </div>
       <figure><img src="assets/studio.jpg" alt="Trei membri ai echipei Zalf la o ședință foto, lângă un laptop cu sigla Zalf și un trepied" width="1100" height="1090"></figure>
@@ -496,27 +483,15 @@ input, textarea { transition: border-color .2s ease; }
         <ul class="quotes">
           <li>Construiește un <b>sistem</b>, nu o postare.</li>
           <li>Alege <b>direcția</b>, nu trendul.</li>
-          <li>Când toată lumea e „real”, realul nu mai e <b>special</b>.</li>
-          <li>Aspirațional, dar cu mai multă <b>intenție</b>.</li>
         </ul>
         <a class="btn" href="https://www.instagram.com/zalf_people" target="_blank" rel="noopener">Vezi feed-ul ↗</a>
       </div>
     </div>
   </section>
 
-  <div class="wrap mood-wrap" aria-hidden="true">
-    <ul class="mood">
-      <li><img src="assets/mood-1.jpg" alt="" width="640" height="800"></li>
-      <li><img src="assets/mood-2.jpg" alt="" width="640" height="800"></li>
-      <li><img src="assets/mood-3.jpg" alt="" width="640" height="800"></li>
-      <li><img src="assets/mood-4.jpg" alt="" width="640" height="800"></li>
-    </ul>
-  </div>
-
   <section id="portofoliu">
     <div class="wrap">
       <h2>Portofoliu</h2>
-      <p class="sub">Branduri care au arătat exact ca <b>next client</b>. Acum sunt clienți.</p>
       <ul class="clients">
         <li><a href="https://everycancounts.eu/ro/" target="_blank" rel="noopener"><img src="assets/client-every-can-counts.png" alt=""><span>Every Can Counts ↗</span></a></li>
         <li><a href="https://complice.ro" target="_blank" rel="noopener"><img src="assets/client-complice.png" alt=""><span>Complice.ro ↗</span></a></li>
@@ -528,7 +503,6 @@ input, textarea { transition: border-color .2s ease; }
   <section id="echipa">
     <div class="wrap">
       <h2>Echipa</h2>
-      <p class="sub">Zalf <b>people</b>. Oamenii din spatele postărilor.</p>
       <ul class="team">
         <li><span class="face"><img src="assets/team-anca.jpg" alt="" width="440" height="440"></span><h3>Anca Popa</h3></li>
         <li><span class="face"><img src="assets/team-miriam.jpg" alt="" width="440" height="440"></span><h3>Băciucă Ana-Maria Miriam</h3></li>
@@ -543,18 +517,13 @@ input, textarea { transition: border-color .2s ease; }
       <h2>Ce facem</h2>
       <p class="sub">Tot ce-i trebuie brandului tău în online, într-un singur loc.</p>
       <ul class="cards">
-        <li><h3>Creare conținut</h3><p>Acoperim toate tipurile de conținut de care brandul tău are nevoie: postări, stories, reels, trenduri, behind the scenes, conținut informativ și educativ. Vizualuri, texte, idei, genul care te oprește din scroll.</p></li>
-        <li><h3>Strategie social media</h3><p>Ne uităm la nișa ta, la audiență și la ce funcționează azi, apoi construim o strategie care:</p>
-          <ul><li>Îți crește notorietatea</li><li>Generează engagement real</li><li>Îți diferențiază brandul de competiție</li></ul></li>
-        <li><h3>Management comunitate</h3><p>Vorbim cu oamenii tăi ca să nu trebuiască tu. Comentarii, mesaje, replici, le ținem noi.</p></li>
-        <li><h3>Publicitate plătită</h3><p>Reclame care nu-ți irosesc bugetul. Testăm, ajustăm și mergem după cifrele care contează.</p></li>
-        <li><h3>Producție video</h3><p>Suntem alături de tine pe platou și dacă vrei, te ajutăm să depășești emoțiile de a fi în fața camerei. Venim cu:</p>
-          <ul><li>Scenarii și idei adaptate brandului tău</li><li>Echipamente profesionale (lumini, lavaliere)</li><li>Flexibilitate: adaptăm producția după ideea, bugetul și timpul tău</li></ul></li>
-        <li><h3>Post-producție &amp; editare</h3><p>Facem videoclipurile tale:</p>
-          <ul><li>Scurte și captivante</li><li>Cu subtitrări dinamice și efecte vizuale</li><li>Colorizare și sound design profesionist</li></ul></li>
-        <li><h3>Administrare cont</h3><p>Dacă vrei, ne ocupăm de tot:</p>
-          <ul><li>Postarea conținutului</li><li>Monitorizarea performanței</li><li>Interacțiunea cu comunitatea</li></ul>
-          <p class="punch">Tu te ocupi de business. Noi te ținem vizibil.</p></li>
+        <li><h3>Creare conținut</h3><p>Postări, stories, reels și trenduri. Genul care te oprește din scroll.</p></li>
+        <li><h3>Strategie social media</h3><p>Notorietate, engagement real și un brand diferit de competiție.</p></li>
+        <li><h3>Management comunitate</h3><p>Comentarii, mesaje, replici. Le ținem noi.</p></li>
+        <li><h3>Publicitate plătită</h3><p>Reclame care nu-ți irosesc bugetul.</p></li>
+        <li><h3>Producție video</h3><p>Scenarii, echipamente și ajutor în fața camerei.</p></li>
+        <li><h3>Post-producție &amp; editare</h3><p>Clipuri scurte, cu subtitrări dinamice și sound design.</p></li>
+        <li><h3>Administrare cont</h3><p>Postăm, monitorizăm și răspundem. <span class="punch">Tu te ocupi de business. Noi te ținem vizibil.</span></p></li>
       </ul>
     </div>
   </section>
@@ -588,7 +557,7 @@ input, textarea { transition: border-color .2s ease; }
         </details>
         <details>
           <summary>Există un contract minim?</summary>
-          <p>Depinde, durata contractului se stabilește în funcție de cât timp dorești să colaborăm, volumul de conținut, complexitatea proiectului și alți factori. Discutăm totul împreună și găsim formula potrivită pentru tine.</p>
+          <p>Depinde de cât vrei să colaborăm și de volumul de conținut. Discutăm și găsim formula potrivită.</p>
         </details>
       </div>
     </div>
@@ -788,14 +757,6 @@ input, textarea { transition: border-color .2s ease; }
     }
     window.addEventListener('resize', function () { box.style.setProperty('--h', (box.offsetHeight + 30) + 'px'); });
   })();
-
-  // Moodboard tiles gain colour while they cross the middle of the screen (the phone's stand-in for hover).
-  if ('IntersectionObserver' in window) {
-    var moodIO = new IntersectionObserver(function (entries) {
-      entries.forEach(function (en) { en.target.classList.toggle('lit', en.isIntersecting); });
-    }, { rootMargin: '-38% 0px -38% 0px' });
-    document.querySelectorAll('.mood li').forEach(function (el) { moodIO.observe(el); });
-  }
 
   // A tap skips the intro.
   var intro = document.getElementById('intro');
