@@ -298,6 +298,22 @@ h2.statement { font: 800 clamp(1.7rem, 3.5vw, 2.7rem)/1.2 var(--text); text-tran
 }
 @keyframes bob { 50% { transform: translateY(-4px) scale(1.08); } }
 
+/* Moodboard: black and white by default so it sits with the palette; colour comes in on hover or when centred on screen */
+.mood { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 22px; }
+.mood li { border-radius: 26px; overflow: hidden; box-shadow: 0 18px 30px -22px rgba(18, 18, 18, .55); transition: transform .5s cubic-bezier(.2, .8, .2, 1), opacity .7s ease; }
+.mood li:nth-child(odd) { rotate: -2deg; }
+.mood li:nth-child(even) { rotate: 2deg; translate: 0 18px; }
+.mood img { display: block; width: 100%; height: auto; filter: grayscale(1) contrast(1.08); transition: filter .6s ease, transform .8s cubic-bezier(.2, .8, .2, 1); }
+.mood li:hover img, .mood li.lit img { filter: none; transform: scale(1.06); }
+.mood li:hover { transform: translateY(-8px); }
+.mood-wrap { padding-block: 26px 44px; }
+
+.why-grid { display: grid; grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.4fr); gap: 48px; align-items: center; }
+.why-grid .why { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.why-photo { margin: 0; border-radius: 30px; overflow: hidden; rotate: -2deg; box-shadow: 0 20px 34px -24px rgba(18, 18, 18, .55); }
+.why-photo img { display: block; width: 100%; height: auto; transition: transform .8s cubic-bezier(.2, .8, .2, 1); }
+.why-photo:hover img { transform: scale(1.05) rotate(2deg); }
+
 /* Spinning sticker in the hero */
 .badge { display: block; width: clamp(120px, 15vw, 170px); aspect-ratio: 1; justify-self: end; margin-right: 8%; transition: transform .35s cubic-bezier(.2, .8, .2, 1); }
 .badge:hover { transform: scale(1.1) rotate(8deg); }
@@ -376,6 +392,10 @@ input, textarea { transition: border-color .2s ease; }
   .steps { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .team { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .why { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .why-grid { grid-template-columns: minmax(0, 1fr); gap: 32px; }
+  .why-photo { max-width: 340px; }
+  .mood { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+  .mood li:nth-child(even) { translate: 0 12px; }
   .packs { grid-template-columns: minmax(0, 1fr); }
   .pack > p { min-height: 0; }
   .contact .grid { grid-template-columns: minmax(0, 1fr); gap: 28px; }
@@ -484,6 +504,15 @@ input, textarea { transition: border-color .2s ease; }
     </div>
   </section>
 
+  <div class="wrap mood-wrap" aria-hidden="true">
+    <ul class="mood">
+      <li><img src="assets/mood-1.jpg" alt="" width="640" height="800"></li>
+      <li><img src="assets/mood-2.jpg" alt="" width="640" height="800"></li>
+      <li><img src="assets/mood-3.jpg" alt="" width="640" height="800"></li>
+      <li><img src="assets/mood-4.jpg" alt="" width="640" height="800"></li>
+    </ul>
+  </div>
+
   <section id="portofoliu">
     <div class="wrap">
       <h2>Portofoliu</h2>
@@ -533,12 +562,15 @@ input, textarea { transition: border-color .2s ease; }
   <section id="de-ce">
     <div class="wrap">
       <h2>De ce să ne alegi</h2>
-      <ul class="why">
+      <div class="why-grid">
+        <figure class="why-photo"><img src="assets/boot.jpg" alt="Un pahar de martini așezat pe talpa unei cizme roșii de zăpadă" width="800" height="960"></figure>
+        <ul class="why">
         <li><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.5A4 4 0 0 1 19 10c0 5.600-7 10-7 10z"/></svg></span><h3>Pasiune pură</h3><p>Social media e treaba noastră. Brandul tău primește energia asta.</p></li>
         <li><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-4 10.500c.7.7 1 1.500 1 2.500h6c0-1 .3-1.800 1-2.500A6 6 0 0 0 12 3z"/></svg></span><h3>Idei proaspete</h3><p>Fără strategii copy-paste. Fiecare campanie e gândită pentru tine, de la zero.</p></li>
         <li><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 17l6-6 4 4 8-8M15 7h6v6"/></svg></span><h3>Orientați spre rezultate</h3><p>Urmărim ce funcționează. Dacă ceva nu merge, schimbăm, rapid.</p></li>
         <li><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.500"/><path d="M2.500 20a6.500 6.500 0 0 1 13 0M16 4.800a3.500 3.500 0 0 1 0 6.400M18 14.200a6.500 6.500 0 0 1 3.500 5.800"/></svg></span><h3>Colaborare apropiată</h3><p>Echipă mică, grijă mare. Vei vorbi mereu cu cineva care îți cunoaște brandul.</p></li>
       </ul>
+      </div>
     </div>
   </section>
 
@@ -637,7 +669,7 @@ input, textarea { transition: border-color .2s ease; }
       });
     }, { rootMargin: '0px 0px -8% 0px' });
     var seen = new Map();
-    document.querySelectorAll('section h2, .sub, .checks li, .quotes li, .clients li, .services li, .steps li, .do figure, .contact form, .contact p, .socials, .team li, .faq details, .cards > li, .why li, .statement, .about, .mini').forEach(function (el) {
+    document.querySelectorAll('section h2, .sub, .checks li, .quotes li, .clients li, .services li, .steps li, .do figure, .contact form, .contact p, .socials, .team li, .faq details, .cards > li, .why li, .statement, .about, .mini, .why-photo').forEach(function (el) {
       if (el.getBoundingClientRect().top < window.innerHeight * 0.9) return;
       var i = seen.get(el.parentNode) || 0;
       seen.set(el.parentNode, i + 1);
@@ -756,6 +788,14 @@ input, textarea { transition: border-color .2s ease; }
     }
     window.addEventListener('resize', function () { box.style.setProperty('--h', (box.offsetHeight + 30) + 'px'); });
   })();
+
+  // Moodboard tiles gain colour while they cross the middle of the screen (the phone's stand-in for hover).
+  if ('IntersectionObserver' in window) {
+    var moodIO = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) { en.target.classList.toggle('lit', en.isIntersecting); });
+    }, { rootMargin: '-38% 0px -38% 0px' });
+    document.querySelectorAll('.mood li').forEach(function (el) { moodIO.observe(el); });
+  }
 
   // A tap skips the intro.
   var intro = document.getElementById('intro');
