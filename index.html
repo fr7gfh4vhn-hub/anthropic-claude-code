@@ -155,7 +155,7 @@ h2 { font: 400 clamp(3rem, 9vw, 6.6rem)/0.9 var(--poster); text-transform: upper
 /* Contact */
 .contact { background: var(--red); color: var(--on-red); border-top: 0; }
 .contact .grid { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 48px; align-items: start; }
-.contact h2 { color: var(--on-red); }
+.contact h2 { color: var(--on-red); font-size: clamp(2.8rem, 6.4vw, 5rem); }
 .contact p { margin: 0 0 24px; font-size: 1.25rem; font-weight: 700; line-height: 1.3; max-width: 22em; }
 .contact .btn { background: var(--ink); color: var(--on-red); justify-self: start; }
 .contact .btn:hover { background: var(--paper); color: var(--ink); }
@@ -241,6 +241,63 @@ footer a:hover { color: var(--red); }
 .faq summary:hover { color: var(--red); }
 .faq details p { margin: 0; padding-bottom: 24px; font-size: 1.08rem; max-width: 46em; }
 
+/* Hero copy */
+.lead { color: var(--red); }
+.lead .soft { color: var(--ink); }
+.story { margin: 0 0 22px; font-size: 1.08rem; max-width: 22em; }
+.cta-row { display: flex; flex-wrap: wrap; gap: 10px; }
+.btn.alt { background: var(--paper); color: var(--ink); }
+.btn.alt:hover { background: var(--ink); color: var(--on-red); }
+
+/* Snow in the hero: ZALF started on the day of the first snowfall */
+.hero { position: relative; }
+.snow { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
+.snow i { position: absolute; top: -12px; border-radius: 50%; background: #fff; box-shadow: 0 0 0 1px rgba(18, 18, 18, .05); animation: snow var(--t) linear var(--dl) infinite; }
+@keyframes snow { to { transform: translate(var(--dx), var(--h)); } }
+@media (prefers-reduced-motion: reduce) { .snow { display: none; } }
+
+/* About */
+h2.statement { font: 800 clamp(1.7rem, 3.5vw, 2.7rem)/1.2 var(--text); text-transform: none; letter-spacing: -0.02em; color: var(--ink); margin-bottom: 22px; text-wrap: pretty; }
+.mark { color: var(--on-red); background: linear-gradient(var(--red), var(--red)) 0 0 / 100% 100% no-repeat; padding: 0 .2em; border-radius: .28em; -webkit-box-decoration-break: clone; box-decoration-break: clone; }
+.about { margin: 0 0 28px; font-size: 1.12rem; max-width: 34em; }
+.mini { font: inherit; font-size: 1.3rem; font-weight: 800; margin: 0 0 16px; }
+.checks.plain { gap: 14px; }
+.checks.plain p { font-size: 1.12rem; font-weight: 700; }
+
+/* What we do: cards */
+.cards { list-style: none; margin: 0; padding: 0; columns: 3 300px; column-gap: 20px; }
+.cards > li { break-inside: avoid; margin-bottom: 20px; background: var(--paper); border-radius: 26px; padding: 28px 28px 30px; box-shadow: 0 16px 28px -22px rgba(18, 18, 18, .5); transition: background .25s ease, color .25s ease, transform .45s cubic-bezier(.2, .8, .2, 1), opacity .7s ease; }
+.cards h3 { font: 400 clamp(1.9rem, 3vw, 2.4rem)/0.95 var(--poster); text-transform: uppercase; color: var(--red); margin: 0 0 12px; transition: color .25s ease; }
+.cards p { margin: 0; }
+.cards ul { list-style: none; margin: 10px 0 0; padding: 0; display: grid; gap: 6px; }
+.cards ul li { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 10px; font-weight: 700; }
+.cards ul li::before { content: ""; width: 9px; height: 9px; border-radius: 50%; background: var(--red); margin-top: .55em; transition: background .25s ease; }
+.cards .punch { margin-top: 14px; font-weight: 800; color: var(--red); transition: color .25s ease; }
+.cards > li:hover { background: var(--red); color: var(--on-red); transform: translateY(-6px) rotate(-1.2deg); }
+.cards > li:nth-child(even):hover { transform: translateY(-6px) rotate(1.2deg); }
+.cards > li:hover h3, .cards > li:hover .punch { color: var(--on-red); }
+.cards > li:hover ul li::before { background: var(--on-red); }
+
+/* Why us */
+.why { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 32px 28px; }
+.why .ico { display: grid; place-items: center; width: 76px; height: 76px; border-radius: 50%; background: var(--red); margin-bottom: 18px; transition: transform .4s cubic-bezier(.2, .8, .2, 1.4); }
+.why .ico svg { width: 34px; height: 34px; fill: none; stroke: var(--on-red); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.why li:hover .ico { transform: scale(1.15) rotate(-10deg); }
+.why h3 { font: 400 clamp(1.8rem, 2.8vw, 2.3rem)/0.95 var(--poster); text-transform: uppercase; margin: 0 0 10px; }
+.why p { margin: 0; }
+@media (prefers-reduced-motion: no-preference) {
+  .why .ico svg { animation: bob 2.8s ease-in-out infinite; }
+  .why li:nth-child(2) .ico svg { animation-delay: -.7s; }
+  .why li:nth-child(3) .ico svg { animation-delay: -1.4s; }
+  .why li:nth-child(4) .ico svg { animation-delay: -2.1s; }
+  /* marker sweeps across highlighted words when they scroll into view */
+  .reveal .mark { background-size: 0 100%; }
+  .reveal.in .mark { background-size: 100% 100%; transition: background-size .8s cubic-bezier(.2, .8, .2, 1) .35s; }
+  .reveal.in .mark:nth-of-type(2) { transition-delay: .6s; }
+  .reveal.in .mark:nth-of-type(3) { transition-delay: .85s; }
+}
+@keyframes bob { 50% { transform: translateY(-4px) scale(1.08); } }
+
 /* Spinning sticker in the hero */
 .badge { display: block; width: clamp(120px, 15vw, 170px); aspect-ratio: 1; justify-self: end; margin-right: 8%; transition: transform .35s cubic-bezier(.2, .8, .2, 1); }
 .badge:hover { transform: scale(1.1) rotate(8deg); }
@@ -318,6 +375,7 @@ input, textarea { transition: border-color .2s ease; }
   .do { grid-template-columns: minmax(0, 1fr); }
   .steps { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .team { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .why { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .packs { grid-template-columns: minmax(0, 1fr); }
   .pack > p { min-height: 0; }
   .contact .grid { grid-template-columns: minmax(0, 1fr); gap: 28px; }
@@ -342,9 +400,9 @@ input, textarea { transition: border-color .2s ease; }
 <header class="wrap top">
   <a class="logo" href="#top" aria-label="Zalf, acasă"><img src="assets/logo.png" alt="Zalf" width="310" height="450"></a>
   <nav class="nav" aria-label="Navigare principală">
+    <a href="#servicii">Ce facem</a>
     <a href="#portofoliu">Portofoliu</a>
     <a href="#echipa">Echipa</a>
-    <a href="#servicii">Servicii</a>
     <a href="#faq">Întrebări</a>
     <a class="btn" href="#contact">Hai să vorbim</a>
   </nav>
@@ -352,6 +410,7 @@ input, textarea { transition: border-color .2s ease; }
 
 <main id="top">
   <div class="wrap hero">
+    <div class="snow" id="snow" aria-hidden="true"></div>
     <h1 class="sr">Zalf, agenție de marketing. What we actually do.</h1>
     <ul class="hero-labels" aria-label="Laugh, post, sell">
       <li>Laugh</li><li>Post</li><li>Sell</li>
@@ -359,8 +418,12 @@ input, textarea { transition: border-color .2s ease; }
     <p class="fit fit-a" aria-hidden="true"><span>What we</span></p>
     <div class="hero-mid">
       <div class="hero-copy">
-        <p class="lead">Agenție de marketing. Râdem mult, postăm des și <b>vindem</b> pentru clienții noștri.</p>
-        <a class="btn" href="#contact">Vreau o ofertă</a>
+        <p class="lead">Marketingul tău e cam „basic”. <span class="soft">Noroc că a nins.</span></p>
+        <p class="story">ZALF a apărut într-o zi cu prima ninsoare. Nu e metaforă. Chiar ningea.</p>
+        <div class="cta-row">
+          <a class="btn" href="#contact">Ready for a cold one?</a>
+          <a class="btn alt" href="#portofoliu">Vezi lucrările noastre</a>
+        </div>
       </div>
       <figure class="hero-photo"><img src="assets/team.jpg" alt="Echipa Zalf în studio, în costume negre, cu schiuri, snowboard și ochelari de schi" width="1000" height="1322"></figure>
       <div class="sheets">
@@ -383,20 +446,22 @@ input, textarea { transition: border-color .2s ease; }
   <div class="tilt" aria-hidden="true">
     <div class="marquee">
       <div class="marquee-track">
-        <span>Stop mirroring<b>·</b></span><span>Start inspiring<b>·</b></span><span>Stop mirroring<b>·</b></span><span>Start inspiring<b>·</b></span><span>Stop mirroring<b>·</b></span><span>Start inspiring<b>·</b></span><span>Stop mirroring<b>·</b></span><span>Start inspiring<b>·</b></span><span>Stop mirroring<b>·</b></span><span>Start inspiring<b>·</b></span><span>Stop mirroring<b>·</b></span><span>Start inspiring<b>·</b></span><span>Stop mirroring<b>·</b></span><span>Start inspiring<b>·</b></span><span>Stop mirroring<b>·</b></span><span>Start inspiring<b>·</b></span>
+        <span>Young<b>·</b></span><span>Sarcastic<b>·</b></span><span>Better<b>·</b></span><span>Young<b>·</b></span><span>Sarcastic<b>·</b></span><span>Better<b>·</b></span><span>Young<b>·</b></span><span>Sarcastic<b>·</b></span><span>Better<b>·</b></span><span>Young<b>·</b></span><span>Sarcastic<b>·</b></span><span>Better<b>·</b></span><span>Young<b>·</b></span><span>Sarcastic<b>·</b></span><span>Better<b>·</b></span><span>Young<b>·</b></span><span>Sarcastic<b>·</b></span><span>Better<b>·</b></span><span>Young<b>·</b></span><span>Sarcastic<b>·</b></span><span>Better<b>·</b></span>
       </div>
     </div>
   </div>
 
-  <section id="ce-facem">
+  <section id="despre">
     <div class="wrap do">
       <div>
-        <h2>Uite ce facem</h2>
-        <ul class="checks">
-          <li><span class="tick" aria-hidden="true">✓</span><h3>Strategy that actually <b>w</b>orks</h3><p>Plan scris, cu obiective și buget. Îl verificăm lună de lună.</p></li>
-          <li><span class="tick" aria-hidden="true">✓</span><h3>Content that c<b>o</b>nverts</h3><p>Foto, video și texte care opresc scroll-ul și duc spre comandă.</p></li>
-          <li><span class="tick" aria-hidden="true">✓</span><h3>Ads that make sense</h3><p>Reclame cu o logică pe care ți-o explicăm în două minute.</p></li>
-          <li><span class="tick" aria-hidden="true">✓</span><h3>Brand gro<b>w</b>th, not just pretty posts</h3><p>Un brand pe care lumea îl ține minte și de la care cumpără.</p></li>
+        <h2 class="statement">ZALF e o echipă de oameni care cred că marketingul poate fi <span class="mark">relaxat</span>, <span class="mark">smart</span> și <span class="mark">de ținut minte</span>.</h2>
+        <p class="about">Suntem o echipă tânără, dar cu pregătire serioasă în spate. Strategie, social media management și conținut, cu asta ne ocupăm zi de zi, cu metodă și un plan clar pentru fiecare brand. Și da, cele mai bune idei tot cu un martini în mână și un vibe bun în jur apar.</p>
+        <h3 class="mini">Ce facem diferit:</h3>
+        <ul class="checks plain">
+          <li><span class="tick" aria-hidden="true">✓</span><p>Facem conținut care rămâne cu oamenii</p></li>
+          <li><span class="tick" aria-hidden="true">✓</span><p>Îți construim prezența acolo unde contează și ai nevoie: TikTok, Instagram, Facebook, LinkedIn și Google</p></li>
+          <li><span class="tick" aria-hidden="true">✓</span><p>Gândim strategii personalizate pentru brandul tău, cu obiective clare și o direcție coerentă</p></li>
+          <li><span class="tick" aria-hidden="true">✓</span><p>Îți facem brandul vizibil, simplu și natural</p></li>
         </ul>
       </div>
       <figure><img src="assets/studio.jpg" alt="Trei membri ai echipei Zalf la o ședință foto, lângă un laptop cu sigla Zalf și un trepied" width="1100" height="1090"></figure>
@@ -446,27 +511,34 @@ input, textarea { transition: border-color .2s ease; }
 
   <section id="servicii">
     <div class="wrap">
-      <h2>Servicii</h2>
-      <p class="sub">Un singur canal sau <b>tot</b> marketingul. Alegem împreună ce are sens pentru bugetul tău.</p>
-      <ul class="services">
-        <li><h3>Strategie și brand</h3><p>Poziționare, public, ton și mesaje. <b>Baza</b> pe care stă tot restul.</p></li>
-        <li><h3>Social media</h3><p>Postări, reels și stories pe Instagram, <b>TikTok</b>, Facebook și LinkedIn.</p></li>
-        <li><h3>Foto și video</h3><p>Ședințe foto, filmări, montaj și copy. Venim cu <b>ideea</b>, trepiedul și recuzita.</p></li>
-        <li><h3>Reclame plătite</h3><p>Meta Ads, Google Ads și TikTok Ads. Testăm, măsurăm, <b>optimizăm</b>.</p></li>
-        <li><h3>Site-uri</h3><p>Pagini rapide, construite în jurul unei singure acțiuni: <b>comanda</b>.</p></li>
+      <h2>Ce facem</h2>
+      <p class="sub">Tot ce-i trebuie brandului tău în online, într-un singur loc.</p>
+      <ul class="cards">
+        <li><h3>Creare conținut</h3><p>Acoperim toate tipurile de conținut de care brandul tău are nevoie: postări, stories, reels, trenduri, behind the scenes, conținut informativ și educativ. Vizualuri, texte, idei, genul care te oprește din scroll.</p></li>
+        <li><h3>Strategie social media</h3><p>Ne uităm la nișa ta, la audiență și la ce funcționează azi, apoi construim o strategie care:</p>
+          <ul><li>Îți crește notorietatea</li><li>Generează engagement real</li><li>Îți diferențiază brandul de competiție</li></ul></li>
+        <li><h3>Management comunitate</h3><p>Vorbim cu oamenii tăi ca să nu trebuiască tu. Comentarii, mesaje, replici, le ținem noi.</p></li>
+        <li><h3>Publicitate plătită</h3><p>Reclame care nu-ți irosesc bugetul. Testăm, ajustăm și mergem după cifrele care contează.</p></li>
+        <li><h3>Producție video</h3><p>Suntem alături de tine pe platou și dacă vrei, te ajutăm să depășești emoțiile de a fi în fața camerei. Venim cu:</p>
+          <ul><li>Scenarii și idei adaptate brandului tău</li><li>Echipamente profesionale (lumini, lavaliere)</li><li>Flexibilitate: adaptăm producția după ideea, bugetul și timpul tău</li></ul></li>
+        <li><h3>Post-producție &amp; editare</h3><p>Facem videoclipurile tale:</p>
+          <ul><li>Scurte și captivante</li><li>Cu subtitrări dinamice și efecte vizuale</li><li>Colorizare și sound design profesionist</li></ul></li>
+        <li><h3>Administrare cont</h3><p>Dacă vrei, ne ocupăm de tot:</p>
+          <ul><li>Postarea conținutului</li><li>Monitorizarea performanței</li><li>Interacțiunea cu comunitatea</li></ul>
+          <p class="punch">Tu te ocupi de business. Noi te ținem vizibil.</p></li>
       </ul>
     </div>
   </section>
 
-  <section id="proces">
+  <section id="de-ce">
     <div class="wrap">
-      <h2>Cum lucrăm</h2>
-      <ol class="steps">
-        <li><span class="n">1</span><h3>Audit</h3><p>Vedem ce merge și ce pierde bani.</p></li>
-        <li><span class="n">2</span><h3>Strategie</h3><p>Obiective, buget, canale. Plan scris.</p></li>
-        <li><span class="n">3</span><h3>Execuție</h3><p>Filmăm, scriem, postăm, lansăm.</p></li>
-        <li><span class="n">4</span><h3>Raport</h3><p>Cât ai investit și ce a adus. Lunar.</p></li>
-      </ol>
+      <h2>De ce să ne alegi</h2>
+      <ul class="why">
+        <li><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.5A4 4 0 0 1 19 10c0 5.600-7 10-7 10z"/></svg></span><h3>Pasiune pură</h3><p>Social media e treaba noastră. Brandul tău primește energia asta.</p></li>
+        <li><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-4 10.500c.7.7 1 1.500 1 2.500h6c0-1 .3-1.800 1-2.500A6 6 0 0 0 12 3z"/></svg></span><h3>Idei proaspete</h3><p>Fără strategii copy-paste. Fiecare campanie e gândită pentru tine, de la zero.</p></li>
+        <li><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 17l6-6 4 4 8-8M15 7h6v6"/></svg></span><h3>Orientați spre rezultate</h3><p>Urmărim ce funcționează. Dacă ceva nu merge, schimbăm, rapid.</p></li>
+        <li><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.500"/><path d="M2.500 20a6.500 6.500 0 0 1 13 0M16 4.800a3.500 3.500 0 0 1 0 6.400M18 14.200a6.500 6.500 0 0 1 3.500 5.800"/></svg></span><h3>Colaborare apropiată</h3><p>Echipă mică, grijă mare. Vei vorbi mereu cu cineva care îți cunoaște brandul.</p></li>
+      </ul>
     </div>
   </section>
 
@@ -500,8 +572,8 @@ input, textarea { transition: border-color .2s ease; }
   <section class="contact" id="contact">
     <div class="wrap grid">
       <div>
-        <h2>You look like our next client</h2>
-        <p>Spune-ne ce vinzi și ce vrei să obții. Revenim cu o propunere.</p>
+        <h2>Hai să facem brandul tău imposibil de ignorat.</h2>
+        <p>Ai o idee? Ai haos? Oricum ar fi, hai să vorbim.</p>
         <dl class="reach">
           <div><dt>E-mail</dt><dd><a href="mailto:office@zalf.ro">office@zalf.ro</a></dd></div>
           <div><dt>Telefon</dt><dd><a href="tel:+40724202474">+40 724 202 474</a></dd></div>
@@ -524,7 +596,7 @@ input, textarea { transition: border-color .2s ease; }
         <label for="f-msg">Despre proiect
           <textarea id="f-msg" name="message" required></textarea>
         </label>
-        <button class="btn" type="submit">Trimite mesajul</button>
+        <button class="btn" type="submit">Contactează-ne</button>
         <p class="status" id="form-status" role="status" hidden></p>
       </form>
     </div>
@@ -537,7 +609,7 @@ input, textarea { transition: border-color .2s ease; }
   <a href="https://www.tiktok.com/@zalfpeople" target="_blank" rel="noopener">TikTok</a>
   <a href="https://www.linkedin.com/company/zalf-people" target="_blank" rel="noopener">LinkedIn</a>
   <a href="https://www.facebook.com/share/1QqTmUy8Uq/" target="_blank" rel="noopener">Facebook</a>
-  <span>Laugh · Post · Sell</span>
+  <span>Social media, făcută cu un pic de atitudine.</span>
 </footer>
 
 <script>
@@ -565,7 +637,7 @@ input, textarea { transition: border-color .2s ease; }
       });
     }, { rootMargin: '0px 0px -8% 0px' });
     var seen = new Map();
-    document.querySelectorAll('section h2, .sub, .checks li, .quotes li, .clients li, .services li, .steps li, .do figure, .contact form, .contact p, .socials, .team li, .packs > li, .packs-note, .faq details').forEach(function (el) {
+    document.querySelectorAll('section h2, .sub, .checks li, .quotes li, .clients li, .services li, .steps li, .do figure, .contact form, .contact p, .socials, .team li, .faq details, .cards > li, .why li, .statement, .about, .mini').forEach(function (el) {
       if (el.getBoundingClientRect().top < window.innerHeight * 0.9) return;
       var i = seen.get(el.parentNode) || 0;
       seen.set(el.parentNode, i + 1);
@@ -669,6 +741,21 @@ input, textarea { transition: border-color .2s ease; }
       if (!box.value.trim() || /^Mă interesează pachetul /.test(box.value)) box.value = 'Mă interesează pachetul ' + a.getAttribute('data-pack') + '.';
     });
   });
+
+  // Snowfall in the hero.
+  (function () {
+    var box = document.getElementById('snow');
+    if (!box || (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches)) return;
+    var n = window.innerWidth < 700 ? 22 : 40, sd = 3;
+    function r() { sd = (sd * 16807) % 2147483647; return sd / 2147483647; }
+    box.style.setProperty('--h', (box.offsetHeight + 30) + 'px');
+    for (var i = 0; i < n; i++) {
+      var f = document.createElement('i'), z = (3 + r() * 6).toFixed(1);
+      f.style.cssText = 'left:' + (r() * 100).toFixed(1) + '%;width:' + z + 'px;height:' + z + 'px;opacity:' + (0.55 + r() * 0.45).toFixed(2) + ';--t:' + (7 + r() * 9).toFixed(1) + 's;--dl:-' + (r() * 16).toFixed(1) + 's;--dx:' + Math.round(-40 + r() * 80) + 'px';
+      box.appendChild(f);
+    }
+    window.addEventListener('resize', function () { box.style.setProperty('--h', (box.offsetHeight + 30) + 'px'); });
+  })();
 
   // A tap skips the intro.
   var intro = document.getElementById('intro');
