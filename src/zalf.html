@@ -176,8 +176,8 @@ textarea { min-height: 120px; resize: vertical; }
 footer { padding-block: 26px; display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; font-size: 0.75rem; }
 footer a:hover { color: var(--red); }
 
-/* Disco balls: one canvas-drawn tile, repeated down the page as the body background */
-body { background-repeat: repeat-y; background-position: top center; background-size: 100% auto; }
+/* Disco balls: canvas-drawn, placed by script as body background layers, never behind a photo or logo */
+body { background-repeat: no-repeat; }
 
 /* Portfolio labels */
 .clients a { gap: 14px; text-decoration: none; }
@@ -552,22 +552,19 @@ input, textarea { transition: border-color .2s ease; }
     });
   }
 
-  // Disco balls: draw one tile of mirror balls on a canvas and repeat it down the page.
+  // Disco balls: draw three mirror balls on canvas, then hang copies down the page as body
+  // background layers. Any spot that would sit behind a photo or logo is skipped.
   (function () {
     try {
-      var narrow = window.innerWidth < 700;
-      var W = narrow ? 600 : 1400, H = narrow ? 1500 : 1700, k = narrow ? 2 : 1;
-      var balls = narrow
-        ? [[70, 230, 150], [540, 560, 115], [300, 930, 58], [50, 1160, 125], [560, 1370, 165]]
-        : [[110, 280, 190], [1270, 190, 135], [1010, 650, 88], [330, 930, 68], [1340, 1160, 200], [150, 1450, 140], [730, 1540, 60]];
-      var c = document.createElement('canvas'); c.width = W * k; c.height = H * k;
-      var g = c.getContext('2d'); g.scale(k, k);
       var seed = 7; function rnd() { seed = (seed * 16807) % 2147483647; return seed / 2147483647; }
-      balls.forEach(function (b) {
-        var cx = b[0], cy = b[1], r = b[2], N = Math.max(9, Math.round(r / 11));
+      var R0 = 120, PAD = 4, STR = 150, UW = 2 * (R0 + PAD), UH = STR + UW;
+      function ball() {
+        var c = document.createElement('canvas'); c.width = UW * 2; c.height = UH * 2;
+        var g = c.getContext('2d'); g.scale(2, 2);
+        var cx = R0 + PAD, cy = STR + R0 + PAD, r = R0, N = 11;
         g.globalAlpha = 0.5;
         g.strokeStyle = '#BDBDBD'; g.lineWidth = 1.5;
-        g.beginPath(); g.moveTo(cx, cy - r - 14); g.lineTo(cx, cy - r - 150); g.stroke();
+        g.beginPath(); g.moveTo(cx, cy - r - 14); g.lineTo(cx, 0); g.stroke();
         g.beginPath(); g.arc(cx, cy - r - 8, 7, 0, 7); g.stroke();
         g.fillStyle = '#CFCFCF'; g.beginPath(); g.arc(cx, cy, r, 0, 7); g.fill();
         for (var i = 0; i < N; i++) {
@@ -587,8 +584,42 @@ input, textarea { transition: border-color .2s ease; }
             g.closePath(); g.fill();
           }
         }
-      });
-      document.body.style.backgroundImage = 'url(' + c.toDataURL('image/png') + ')';
+        return 'url(' + c.toDataURL('image/png') + ')';
+      }
+      for (var b = 0; b < 3; b++) document.body.style.setProperty('--ball' + b, ball());
+
+      function hang() {
+        seed = 11;
+        var W = document.documentElement.clientWidth, H = document.documentElement.scrollHeight, narrow = W < 700;
+        var avoid = [].map.call(document.querySelectorAll('main img, .logo img'), function (el) {
+          var q = el.getBoundingClientRect();
+          return [q.left - 16, q.top + window.scrollY - 40, q.right + 16, q.bottom + window.scrollY + 40];
+        });
+        var img = [], pos = [], size = [];
+        for (var y = 200, n = 0; y < H - 300; y += narrow ? 340 : 290, n++) {
+          for (var t = 0; t < 8; t++) {
+            var R = narrow ? 42 + rnd() * 70 : 60 + rnd() * 130, side = (n + t) % 3;
+            var cx = side === 0 ? rnd() * W * 0.14 : side === 1 ? W - rnd() * W * 0.14 : W * 0.15 + rnd() * W * 0.7;
+            var cy = y + rnd() * 160;
+            var clear = avoid.every(function (a) { return cx + R < a[0] || cx - R > a[2] || cy + R < a[1] || cy - R > a[3]; });
+            if (!clear) continue;
+            var k = R / R0;
+            img.push('var(--ball' + (n % 3) + ')');
+            pos.push(Math.round(cx - (R0 + PAD) * k) + 'px ' + Math.round(cy - (STR + PAD + R0) * k) + 'px');
+            size.push(Math.round(UW * k) + 'px ' + Math.round(UH * k) + 'px');
+            break;
+          }
+        }
+        document.body.style.backgroundImage = img.join(',');
+        document.body.style.backgroundPosition = pos.join(',');
+        document.body.style.backgroundSize = size.join(',');
+      }
+      var timer;
+      function later() { clearTimeout(timer); timer = setTimeout(hang, 200); }
+      hang();
+      window.addEventListener('load', later);
+      window.addEventListener('resize', later);
+      if (document.fonts && document.fonts.ready) document.fonts.ready.then(later);
     } catch (e) { /* decoration only */ }
   })();
 
