@@ -170,6 +170,13 @@ input, textarea {
 input:focus-visible, textarea:focus-visible { outline: 0; border-color: var(--ink); }
 textarea { min-height: 120px; resize: vertical; }
 .status { margin: 0; font-size: 0.9rem; }
+.reach { margin: 0 0 28px; display: grid; gap: 0; max-width: 26em; }
+.reach div { display: grid; grid-template-columns: 6.5em minmax(0, 1fr); gap: 12px; align-items: baseline; padding-block: 12px; border-top: 2px solid var(--on-red); }
+.reach div:last-child { border-bottom: 2px solid var(--on-red); }
+.reach dt { font-size: 0.75rem; font-weight: 600; }
+.reach dd { margin: 0; font-size: clamp(1rem, 2.2vw, 1.3rem); font-weight: 700; overflow-wrap: anywhere; user-select: all; }
+.reach a { text-decoration: none; }
+.reach a:hover { text-decoration: underline; text-underline-offset: 4px; }
 
 footer { padding-block: 26px; display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; font-size: 0.75rem; }
 footer a:hover { color: var(--red); }
@@ -371,7 +378,7 @@ input, textarea { transition: border-color .2s ease; }
         <li><span class="face"><img src="assets/team-anca.jpg" alt="" width="440" height="440"></span><h3>Anca Popa</h3></li>
         <li><span class="face"><img src="assets/team-miriam.jpg" alt="" width="440" height="440"></span><h3>Băciucă Ana-Maria Miriam</h3></li>
         <li><span class="face"><img src="assets/team-georgiana.jpg" alt="" width="440" height="440"></span><h3>Atudorei Georgiana</h3></li>
-        <li><span class="face blank" aria-hidden="true">CL</span><h3>Cazan Leonard</h3></li>
+        <li><span class="face"><img src="assets/team-leonard.jpg" alt="" width="440" height="440"></span><h3>Cazan Leonard</h3></li>
       </ul>
     </div>
   </section>
@@ -478,6 +485,11 @@ input, textarea { transition: border-color .2s ease; }
       <div>
         <h2>You look like our next client</h2>
         <p>Spune-ne ce vinzi și ce vrei să obții. Revenim cu o propunere.</p>
+        <dl class="reach">
+          <div><dt>E-mail</dt><dd><a href="mailto:office@zalf.ro">office@zalf.ro</a></dd></div>
+          <div><dt>Telefon</dt><dd><a href="tel:+40724202474">+40 724 202 474</a></dd></div>
+          <div><dt>Adresă</dt><dd>București</dd></div>
+        </dl>
         <div class="socials">
           <a class="btn ghost" href="https://www.instagram.com/zalf_people" target="_blank" rel="noopener">Instagram ↗</a>
           <a class="btn ghost" href="https://www.tiktok.com/@zalfpeople" target="_blank" rel="noopener">TikTok ↗</a>
@@ -607,7 +619,7 @@ input, textarea { transition: border-color .2s ease; }
     // TODO: conectează formularul la un serviciu de e-mail (ex. Formspree, Netlify Forms) sau la un backend propriu.
     status.textContent = missing
       ? 'Completează numele, un e-mail valid și câteva cuvinte despre proiect.'
-      : 'Formularul nu este încă legat la o adresă de e-mail, așa că mesajul nu a fost trimis.';
+      : 'Formularul nu trimite încă mesaje. Scrie-ne direct la office@zalf.ro sau sună la +40 724 202 474.';
   });
 })();
 </script>
