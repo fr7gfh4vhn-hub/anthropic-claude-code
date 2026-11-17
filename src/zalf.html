@@ -69,9 +69,41 @@ b, .r { font-weight: inherit; color: var(--red); }
 .top { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-block: 14px; }
 .logo { display: block; line-height: 0; }
 .logo img { height: 76px; width: auto; mix-blend-mode: multiply; }
-.nav { display: flex; align-items: center; gap: 6px 28px; flex-wrap: wrap; justify-content: flex-end; font-size: 1rem; font-weight: 700; }
-.nav a { text-decoration: none; }
-.nav a:not(.btn):hover { color: var(--red); }
+/* Menu: three red lines fixed top right; opens a full-screen red panel */
+.burger {
+  position: fixed; z-index: 95;
+  top: calc(18px + env(safe-area-inset-top, 0px)); right: calc(max(20px, env(safe-area-inset-right, 0px)));
+  width: 58px; height: 58px; border: 0; border-radius: 50%; cursor: pointer;
+  background: var(--paper); box-shadow: 0 10px 24px -12px rgba(18, 18, 18, .45);
+  display: grid; place-content: center; gap: 6px;
+  transition: transform .3s cubic-bezier(.2, .8, .2, 1), background .25s ease;
+}
+.burger:hover { transform: scale(1.08); }
+.burger span { display: block; width: 26px; height: 3px; border-radius: 3px; background: var(--red); transition: transform .35s cubic-bezier(.2, .8, .2, 1), opacity .2s ease, background .25s ease; }
+.menu-open .burger span { background: var(--red); }
+.menu-open .burger span:nth-child(1) { transform: translateY(9px) rotate(45deg); }
+.menu-open .burger span:nth-child(2) { opacity: 0; }
+.menu-open .burger span:nth-child(3) { transform: translateY(-9px) rotate(-45deg); }
+
+.menu {
+  position: fixed; inset: 0; z-index: 90; overflow-y: auto;
+  background: var(--red); color: var(--on-red);
+  clip-path: circle(0 at calc(100% - 50px) 48px); visibility: hidden;
+  transition: clip-path .6s cubic-bezier(.7, 0, .2, 1), visibility 0s linear .6s;
+}
+.menu-open .menu { clip-path: circle(150% at calc(100% - 50px) 48px); visibility: visible; transition: clip-path .6s cubic-bezier(.7, 0, .2, 1); }
+.menu-in { min-height: 100%; display: grid; align-content: center; gap: 36px; padding-block: calc(96px + env(safe-area-inset-top, 0px)) calc(40px + env(safe-area-inset-bottom, 0px)); }
+.menu ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; }
+.menu-links a { display: inline-block; font: 400 clamp(2.6rem, min(8vw, 8.5vh), 4.2rem)/1.08 var(--poster); text-transform: uppercase; text-decoration: none; padding-block: 2px; transition: transform .3s cubic-bezier(.2, .8, .2, 1), color .2s ease; }
+.menu-links a:hover, .menu-links a:focus-visible { color: var(--ink); transform: translateX(12px); }
+.menu-links li { opacity: 0; transform: translateY(24px); transition: opacity .4s ease, transform .5s cubic-bezier(.2, .8, .2, 1); }
+.menu-open .menu-links li { opacity: 1; transform: none; transition-delay: calc(.18s + var(--i) * .05s); }
+.menu-foot { display: flex; flex-wrap: wrap; gap: 10px 26px; font-weight: 700; }
+.menu-foot a { text-decoration: none; }
+.menu-foot a:hover { text-decoration: underline; text-underline-offset: 4px; }
+.menu :focus-visible { outline-color: var(--paper); }
+html.menu-open { overflow: hidden; }
+@media (prefers-reduced-motion: reduce) { .menu, .menu-open .menu, .menu-links li { transition: none; } }
 
 .btn {
   display: inline-block; border: 0; cursor: pointer;
@@ -337,8 +369,6 @@ h2.statement { font: 800 clamp(1.7rem, 3.5vw, 2.7rem)/1.2 var(--text); text-tran
 .btn { transition: background .15s ease, color .15s ease, transform .2s cubic-bezier(.2, .8, .2, 1); }
 .btn:hover { transform: translateY(-2px); }
 .btn:active { transform: translateY(0) scale(.97); }
-.nav a:not(.btn) { padding-bottom: 4px; background: linear-gradient(currentColor, currentColor) 0 100% / 0 2px no-repeat; transition: background-size .25s ease, color .15s ease; }
-.nav a:not(.btn):hover { background-size: 100% 2px; }
 .logo img { transition: transform .35s cubic-bezier(.2, .8, .2, 1); }
 .logo:hover img { transform: rotate(-6deg) scale(1.05); }
 .services h3 { transition: transform .3s cubic-bezier(.2, .8, .2, 1), color .2s ease; }
@@ -392,7 +422,7 @@ input, textarea { transition: border-color .2s ease; }
   .clients { grid-template-columns: minmax(0, 1fr); gap: 22px; }
   .services li { grid-template-columns: minmax(0, 1fr); }
   .steps { grid-template-columns: minmax(0, 1fr); }
-  .nav a:not(.btn) { display: none; }
+  .burger { width: 52px; height: 52px; top: calc(16px + env(safe-area-inset-top, 0px)); }
   .logo img { height: 62px; }
 }
 </style>
@@ -401,14 +431,29 @@ input, textarea { transition: border-color .2s ease; }
 
 <header class="wrap top">
   <a class="logo" href="#top" aria-label="Zalf, acasă"><img src="assets/logo.png" alt="Zalf" width="310" height="450"></a>
-  <nav class="nav" aria-label="Navigare principală">
-    <a href="#servicii">Ce facem</a>
-    <a href="#portofoliu">Portofoliu</a>
-    <a href="#echipa">Echipa</a>
-    <a href="#faq">Întrebări</a>
-    <a class="btn" href="#contact">Hai să vorbim</a>
-  </nav>
 </header>
+
+<button class="burger" id="burger" type="button" aria-label="Deschide meniul" aria-expanded="false" aria-controls="menu"><span></span><span></span><span></span></button>
+<nav class="menu" id="menu" aria-label="Meniu" inert>
+  <div class="wrap menu-in">
+    <ul class="menu-links">
+      <li style="--i:0"><a href="#servicii">Ce facem</a></li>
+      <li style="--i:1"><a href="#despre">Despre noi</a></li>
+      <li style="--i:2"><a href="#portofoliu">Portofoliu</a></li>
+      <li style="--i:3"><a href="#echipa">Echipa</a></li>
+      <li style="--i:4"><a href="#de-ce">De ce noi</a></li>
+      <li style="--i:5"><a href="#faq">Întrebări</a></li>
+      <li style="--i:6"><a href="#contact">Contact</a></li>
+    </ul>
+    <div class="menu-foot">
+      <a href="https://www.instagram.com/zalf_people" target="_blank" rel="noopener">Instagram ↗</a>
+      <a href="https://www.tiktok.com/@zalfpeople" target="_blank" rel="noopener">TikTok ↗</a>
+      <a href="https://www.linkedin.com/company/zalf-people" target="_blank" rel="noopener">LinkedIn ↗</a>
+      <a href="https://www.facebook.com/share/1QqTmUy8Uq/" target="_blank" rel="noopener">Facebook ↗</a>
+      <span>office@zalf.ro</span>
+    </div>
+  </div>
+</nav>
 
 <main id="top">
   <div class="wrap hero">
@@ -750,6 +795,21 @@ input, textarea { transition: border-color .2s ease; }
       box.appendChild(f);
     }
     window.addEventListener('resize', function () { box.style.setProperty('--h', (box.offsetHeight + 30) + 'px'); });
+  })();
+
+  // Menu open / close.
+  (function () {
+    var btn = document.getElementById('burger'), menu = document.getElementById('menu'), root = document.documentElement;
+    function set(open) {
+      root.classList.toggle('menu-open', open);
+      btn.setAttribute('aria-expanded', open);
+      btn.setAttribute('aria-label', open ? 'Închide meniul' : 'Deschide meniul');
+      if (open) { menu.removeAttribute('inert'); setTimeout(function () { var a = menu.querySelector('a'); if (a) a.focus({ preventScroll: true }); }, 250); }
+      else { menu.setAttribute('inert', ''); }
+    }
+    btn.addEventListener('click', function () { set(!root.classList.contains('menu-open')); });
+    menu.addEventListener('click', function (e) { if (e.target.closest('a')) set(false); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && root.classList.contains('menu-open')) { set(false); btn.focus(); } });
   })();
 
   // A tap skips the intro.
