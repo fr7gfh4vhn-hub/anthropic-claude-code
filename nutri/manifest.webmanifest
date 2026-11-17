@@ -1,0 +1,10 @@
+{
+  "name": "Farfuria – macro și micronutrienți",
+  "short_name": "Farfuria",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#f5f6f3",
+  "theme_color": "#1f7a4d",
+  "lang": "ro",
+  "icons": [{ "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }]
+}

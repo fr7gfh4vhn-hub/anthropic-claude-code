@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Farfuria</title>
+<meta name="description" content="Calculează macro și micronutrienți din gramaje sau dintr-o poză a farfuriei și urmărește-ți obiectivele.">
+<meta name="theme-color" content="#1f7a4d">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon.svg">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+<style>
+:root {
+  --bg: #f5f6f3; --card: #ffffff; --ink: #18201b; --muted: #5d6b62; --line: #e1e5df;
+  --accent: #1f7a4d; --accent-soft: #e2f1e8; --on-accent: #ffffff;
+  --p: #3b6fd8; --c: #d99a1e; --f: #c94f6d; --warn: #c2410c; --track: #eceee9;
+  --radius: 16px; --shadow: 0 1px 2px rgb(0 0 0 / .05), 0 4px 16px rgb(0 0 0 / .04);
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0f1411; --card: #18201b; --ink: #e8eee9; --muted: #9aa89f; --line: #26302a;
+    --accent: #4cc285; --accent-soft: #1b3326; --on-accent: #08130d;
+    --p: #7aa2ff; --c: #f0b84a; --f: #ef7f9a; --warn: #fb923c; --track: #242d27;
+    --shadow: none; color-scheme: dark;
+  }
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body {
+  background: var(--bg); color: var(--ink);
+  font: 400 15px/1.45 Inter, system-ui, -apple-system, "Segoe UI", sans-serif;
+  padding-bottom: calc(76px + env(safe-area-inset-bottom));
+  -webkit-font-smoothing: antialiased;
+}
+button, input, select, textarea { font: inherit; color: inherit; }
+.wrap { max-width: 640px; margin: 0 auto; padding: 0 16px; }
+header { position: sticky; top: 0; z-index: 5; background: color-mix(in srgb, var(--bg) 88%, transparent); backdrop-filter: blur(10px); padding-top: env(safe-area-inset-top); }
+header .wrap { display: flex; align-items: center; justify-content: space-between; height: 56px; gap: 8px; }
+.brand { font-weight: 700; font-size: 19px; letter-spacing: -.02em; display: flex; align-items: center; gap: 8px; }
+.brand svg { width: 26px; height: 26px; }
+.datenav { display: flex; align-items: center; gap: 4px; }
+.datenav span { min-width: 92px; text-align: center; font-weight: 600; font-size: 14px; }
+.icon-btn { border: 0; background: transparent; width: 36px; height: 36px; border-radius: 10px; cursor: pointer; display: grid; place-items: center; }
+.icon-btn:hover { background: var(--track); }
+h2 { font-size: 17px; margin: 0 0 12px; letter-spacing: -.01em; }
+h3 { font-size: 14px; margin: 0 0 8px; color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: .04em; }
+.card { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 16px; margin: 12px 0; box-shadow: var(--shadow); }
+.muted { color: var(--muted); }
+.small { font-size: 13px; }
+.row { display: flex; gap: 8px; align-items: center; }
+.grow { flex: 1; min-width: 0; }
+.btn { border: 1px solid var(--line); background: var(--card); padding: 10px 14px; border-radius: 12px; cursor: pointer; font-weight: 600; }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+.btn.block { width: 100%; }
+.btn:disabled { opacity: .55; cursor: default; }
+.btn.danger { color: var(--warn); }
+label.field { display: block; margin: 0 0 12px; }
+label.field > span { display: block; font-size: 13px; color: var(--muted); margin-bottom: 4px; font-weight: 500; }
+input[type=text], input[type=number], input[type=password], select, textarea {
+  width: 100%; padding: 10px 12px; border: 1px solid var(--line); border-radius: 12px; background: var(--bg); outline: none;
+}
+input:focus, select:focus, textarea:focus { border-color: var(--accent); }
+textarea { min-height: 110px; resize: vertical; }
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0 12px; }
+.seg { display: flex; background: var(--track); border-radius: 12px; padding: 3px; gap: 3px; margin-bottom: 12px; }
+.seg button { flex: 1; border: 0; background: transparent; padding: 8px; border-radius: 9px; cursor: pointer; font-weight: 600; color: var(--muted); }
+.seg button[aria-pressed=true] { background: var(--card); color: var(--ink); box-shadow: var(--shadow); }
+
+/* Sumar zi */
+.summary { display: grid; grid-template-columns: 132px 1fr; gap: 16px; align-items: center; }
+.ring { position: relative; width: 132px; height: 132px; }
+.ring svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+.ring .center { position: absolute; inset: 0; display: grid; place-content: center; text-align: center; }
+.ring .big { font-size: 26px; font-weight: 700; letter-spacing: -.03em; line-height: 1; }
+.bar { height: 8px; background: var(--track); border-radius: 99px; overflow: hidden; }
+.bar > i { display: block; height: 100%; border-radius: 99px; background: var(--accent); transition: width .4s; }
+.macro { margin-bottom: 10px; }
+.macro .row { justify-content: space-between; font-size: 13px; margin-bottom: 4px; }
+.macro b { font-weight: 600; }
+.micro { display: grid; grid-template-columns: 1fr; gap: 10px; }
+.micro .row { justify-content: space-between; font-size: 13px; margin-bottom: 3px; }
+.over > i { background: var(--warn) !important; }
+
+/* Mese */
+.meal + .meal { border-top: 1px solid var(--line); margin-top: 12px; padding-top: 12px; }
+.meal-head { display: flex; justify-content: space-between; font-weight: 600; margin-bottom: 6px; }
+.entry { display: flex; align-items: center; gap: 8px; padding: 6px 0; font-size: 14px; }
+.entry .name { flex: 1; min-width: 0; }
+.entry .name small { display: block; color: var(--muted); font-size: 12px; }
+.empty { color: var(--muted); font-size: 14px; padding: 4px 0; }
+
+/* Ciornă (rezultat analiză) */
+.draft-item { border: 1px solid var(--line); border-radius: 12px; padding: 10px; margin-bottom: 8px; }
+.draft-item .row { flex-wrap: wrap; }
+.draft-item input[type=number] { width: 90px; }
+.pill { font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 99px; background: var(--accent-soft); color: var(--accent); white-space: nowrap; }
+.pill.warn { background: color-mix(in srgb, var(--warn) 15%, transparent); color: var(--warn); }
+.totals { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; text-align: center; margin: 12px 0; }
+.totals div { background: var(--bg); border-radius: 12px; padding: 8px 4px; }
+.totals b { display: block; font-size: 17px; }
+.totals span { font-size: 12px; color: var(--muted); }
+.photo-drop { border: 2px dashed var(--line); border-radius: var(--radius); padding: 24px 16px; text-align: center; cursor: pointer; display: block; }
+.photo-drop img { max-width: 100%; max-height: 320px; border-radius: 12px; display: block; margin: 0 auto; }
+.note { background: var(--accent-soft); border-radius: 12px; padding: 10px 12px; font-size: 13px; margin: 8px 0; }
+.err { background: color-mix(in srgb, var(--warn) 14%, transparent); color: var(--warn); border-radius: 12px; padding: 10px 12px; font-size: 14px; margin: 8px 0; }
+.spinner { width: 18px; height: 18px; border: 2px solid currentColor; border-right-color: transparent; border-radius: 50%; display: inline-block; animation: spin .8s linear infinite; vertical-align: -3px; }
+@keyframes spin { to { transform: rotate(360deg); } }
+details summary { cursor: pointer; font-weight: 600; font-size: 14px; }
+.kv { display: grid; grid-template-columns: 1fr auto; gap: 4px 12px; font-size: 13px; margin-top: 8px; }
+
+/* Navigare jos */
+nav.tabs { position: fixed; bottom: 0; left: 0; right: 0; background: var(--card); border-top: 1px solid var(--line); padding-bottom: env(safe-area-inset-bottom); z-index: 5; }
+nav.tabs .wrap { display: grid; grid-template-columns: repeat(4, 1fr); }
+nav.tabs button { border: 0; background: transparent; padding: 8px 0 10px; display: grid; justify-items: center; gap: 2px; font-size: 11px; font-weight: 600; color: var(--muted); cursor: pointer; }
+nav.tabs button svg { width: 24px; height: 24px; }
+nav.tabs button[aria-current=page] { color: var(--accent); }
+section[hidden] { display: none; }
+@media (max-width: 380px) { .summary { grid-template-columns: 1fr; justify-items: center; } .summary > div:last-child { width: 100%; } }
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <div class="brand">
+      <svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="14" fill="var(--accent)"/><circle cx="16" cy="16" r="9" fill="none" stroke="var(--on-accent)" stroke-width="2"/><path d="M16 7v9l6 4" stroke="var(--on-accent)" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
+      Farfuria
+    </div>
+    <div class="datenav">
+      <button class="icon-btn" id="prevDay" aria-label="Ziua anterioară"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg></button>
+      <span id="dateLabel">Azi</span>
+      <button class="icon-btn" id="nextDay" aria-label="Ziua următoare"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <!-- JURNAL -->
+  <section id="tab-today">
+    <div class="card">
+      <div class="summary">
+        <div class="ring">
+          <svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="52" fill="none" stroke="var(--track)" stroke-width="12"/><circle id="ringArc" cx="60" cy="60" r="52" fill="none" stroke="var(--accent)" stroke-width="12" stroke-linecap="round" stroke-dasharray="326.7" stroke-dashoffset="326.7" style="transition: stroke-dashoffset .5s"/></svg>
+          <div class="center"><div class="big" id="kcalEaten">0</div><div class="small muted" id="kcalTarget">din 0 kcal</div></div>
+        </div>
+        <div id="macroBars"></div>
+      </div>
+      <p class="small muted" id="kcalLeft" style="margin: 12px 0 0"></p>
+    </div>
+    <div class="card">
+      <h2>Mese</h2>
+      <div id="meals"></div>
+    </div>
+    <div class="card">
+      <h2>Micronutrienți</h2>
+      <div class="micro" id="microBars"></div>
+      <p class="small muted" style="margin: 12px 0 0">Zaharuri și sodiu sunt limite maxime, nu ținte. Valorile sunt estimări.</p>
+    </div>
+  </section>
+
+  <!-- ADAUGĂ -->
+  <section id="tab-add" hidden>
+    <div class="card">
+      <div class="seg" role="group" aria-label="Mod de adăugare">
+        <button id="modeText" aria-pressed="true">Gramaje</button>
+        <button id="modePhoto" aria-pressed="false">Poză farfurie</button>
+      </div>
+
+      <div id="paneText">
+        <label class="field"><span>Scrie produsele și gramajele, câte unul pe rând sau separate prin virgulă</span>
+          <textarea id="foodText" placeholder="200 g piept de pui gătit&#10;150 g orez fiert&#10;2 ouă&#10;100 g broccoli&#10;10 ml ulei de măsline"></textarea>
+        </label>
+        <button class="btn primary block" id="calcText">Calculează</button>
+      </div>
+
+      <div id="panePhoto" hidden>
+        <label class="photo-drop" id="photoDrop">
+          <input type="file" id="photoInput" accept="image/*" capture="environment" hidden>
+          <div id="photoPreview">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.8"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg>
+            <div style="font-weight:600; margin-top:6px">Fă o poză farfuriei</div>
+            <div class="small muted">sau alege una din galerie</div>
+          </div>
+        </label>
+        <label class="field" style="margin-top:12px"><span>Detalii opționale (ajută estimarea)</span>
+          <input type="text" id="photoHint" placeholder="ex: farfurie de 26 cm, gătit cu o lingură de ulei">
+        </label>
+        <button class="btn primary block" id="analyzePhoto" disabled>Analizează poza</button>
+        <p class="small muted" style="margin:8px 0 0">Gramajele din poză sunt estimări vizuale. Verifică-le și corectează-le înainte să salvezi.</p>
+      </div>
+      <div id="addStatus"></div>
+    </div>
+
+    <div class="card" id="draftCard" hidden>
+      <h2>Rezultat</h2>
+      <div id="draftNotes"></div>
+      <div id="draftItems"></div>
+      <div class="totals" id="draftTotals"></div>
+      <details><summary>Micronutrienți pentru această masă</summary><div class="kv" id="draftMicro"></div></details>
+      <div class="row" style="margin-top:14px">
+        <select id="draftMeal" class="grow" aria-label="Masa">
+          <option value="breakfast">Mic dejun</option><option value="lunch">Prânz</option><option value="dinner">Cină</option><option value="snack">Gustare</option>
+        </select>
+        <button class="btn primary" id="saveDraft">Adaugă în jurnal</button>
+      </div>
+    </div>
+    <datalist id="foodList"></datalist>
+  </section>
+
+  <!-- OBIECTIVE -->
+  <section id="tab-goals" hidden>
+    <div class="card">
+      <h2>Profil</h2>
+      <div class="grid2">
+        <label class="field"><span>Sex</span><select id="pSex"><option value="m">Masculin</option><option value="f">Feminin</option></select></label>
+        <label class="field"><span>Vârstă</span><input type="number" id="pAge" min="14" max="100" inputmode="numeric"></label>
+        <label class="field"><span>Greutate (kg)</span><input type="number" id="pWeight" min="30" max="300" step="0.1" inputmode="decimal"></label>
+        <label class="field"><span>Înălțime (cm)</span><input type="number" id="pHeight" min="120" max="230" inputmode="numeric"></label>
+      </div>
+      <label class="field"><span>Nivel de activitate</span><select id="pActivity"></select></label>
+      <label class="field"><span>Obiectiv</span><select id="pGoal"></select></label>
+    </div>
+    <div class="card">
+      <h2>Ținte zilnice</h2>
+      <label class="row small" style="margin-bottom:12px"><input type="checkbox" id="pCustom"> Setez manual caloriile și macro</label>
+      <div class="grid2">
+        <label class="field"><span>Calorii (kcal)</span><input type="number" id="tKcal" inputmode="numeric"></label>
+        <label class="field"><span>Proteine (g)</span><input type="number" id="tP" inputmode="numeric"></label>
+        <label class="field"><span>Carbohidrați (g)</span><input type="number" id="tC" inputmode="numeric"></label>
+        <label class="field"><span>Grăsimi (g)</span><input type="number" id="tF" inputmode="numeric"></label>
+      </div>
+      <p class="small muted" id="goalExplain" style="margin:0"></p>
+    </div>
+  </section>
+
+  <!-- SETĂRI -->
+  <section id="tab-settings" hidden>
+    <div class="card">
+      <h2>Analiză AI (poze)</h2>
+      <p class="small muted" style="margin-top:0">Pozele și textul liber sunt analizate de Claude. Ai nevoie de o cheie API de la console.anthropic.com. Cheia rămâne doar pe acest dispozitiv.</p>
+      <label class="field"><span>Cheie API Anthropic</span><input type="password" id="apiKey" placeholder="sk-ant-..." autocomplete="off"></label>
+      <label class="field"><span>Model</span>
+        <select id="model">
+          <option value="claude-opus-5-5">Claude Opus 5.5 (cel mai precis)</option>
+          <option value="claude-sonnet-5-5">Claude Sonnet 5.5 (mai ieftin)</option>
+          <option value="claude-haiku-5-5">Claude Haiku 5.5 (cel mai ieftin)</option>
+        </select>
+      </label>
+      <label class="row small" style="margin-bottom:4px"><input type="checkbox" id="aiFallback"> Folosește AI pentru produsele negăsite în baza locală</label>
+    </div>
+    <div class="card">
+      <h2>Date</h2>
+      <div class="row" style="flex-wrap:wrap">
+        <button class="btn" id="exportData">Exportă</button>
+        <label class="btn">Importă<input type="file" id="importData" accept="application/json" hidden></label>
+        <button class="btn danger" id="clearData">Șterge tot</button>
+      </div>
+    </div>
+  </section>
+</main>
+
+<nav class="tabs" aria-label="Secțiuni">
+  <div class="wrap">
+    <button data-tab="today" aria-current="page"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="8.5"/><path d="M12 3.5V12l5 3"/></svg>Jurnal</button>
+    <button data-tab="add"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg>Adaugă</button>
+    <button data-tab="goals"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r="1" fill="currentColor"/></svg>Obiective</button>
+    <button data-tab="settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>Setări</button>
+  </div>
+</nav>
+
+<script type="module" src="app.js"></script>
+</body>
+</html>
