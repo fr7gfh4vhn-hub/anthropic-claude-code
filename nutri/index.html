@@ -107,6 +107,19 @@ textarea { min-height: 110px; resize: vertical; }
 .err { background: color-mix(in srgb, var(--warn) 14%, transparent); color: var(--warn); border-radius: 12px; padding: 10px 12px; font-size: 14px; margin: 8px 0; }
 .spinner { width: 18px; height: 18px; border: 2px solid currentColor; border-right-color: transparent; border-radius: 50%; display: inline-block; animation: spin .8s linear infinite; vertical-align: -3px; }
 @keyframes spin { to { transform: rotate(360deg); } }
+.tips { background: var(--bg); border-radius: 12px; padding: 10px 12px; margin-bottom: 12px; }
+.tips ol { margin: 4px 0 0; padding-left: 20px; }
+.shots { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 8px; }
+.shots:empty { display: none; }
+.shot { position: relative; aspect-ratio: 1; border-radius: 12px; overflow: hidden; background: var(--track); }
+.shot img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.shot button { position: absolute; top: 4px; right: 4px; width: 28px; height: 28px; border-radius: 50%; border: 0; background: rgb(0 0 0 / .6); color: #fff; cursor: pointer; }
+.shot span { position: absolute; left: 6px; bottom: 4px; font-size: 11px; font-weight: 600; color: #fff; text-shadow: 0 1px 2px rgb(0 0 0 / .8); }
+.weighed { font-size: 12px; color: var(--muted); display: inline-flex; gap: 4px; align-items: center; }
+.stat { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; text-align: center; margin-bottom: 8px; }
+.stat div { background: var(--bg); border-radius: 12px; padding: 10px 4px; }
+.stat b { display: block; font-size: 20px; }
+.stat span { font-size: 12px; color: var(--muted); }
 details summary { cursor: pointer; font-weight: 600; font-size: 14px; }
 .kv { display: grid; grid-template-columns: 1fr auto; gap: 4px 12px; font-size: 13px; margin-top: 8px; }
 
@@ -175,19 +188,29 @@ section[hidden] { display: none; }
       </div>
 
       <div id="panePhoto" hidden>
+        <div class="tips small">
+          <b>Pentru precizie maximă:</b>
+          <ol>
+            <li>O poză de sus, cu toată farfuria în cadru.</li>
+            <li>A doua poză din lateral (~45°), ca să se vadă înălțimea porțiilor.</li>
+            <li>Pune o furculiță sau un card bancar lângă farfurie, ca reper de mărime.</li>
+            <li>Lumină bună, alimentele să nu fie acoperite de sos.</li>
+          </ol>
+        </div>
+        <div class="shots" id="shots"></div>
         <label class="photo-drop" id="photoDrop">
           <input type="file" id="photoInput" accept="image/*" capture="environment" hidden>
           <div id="photoPreview">
             <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.8"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg>
-            <div style="font-weight:600; margin-top:6px">Fă o poză farfuriei</div>
-            <div class="small muted">sau alege una din galerie</div>
+            <div style="font-weight:600; margin-top:6px" id="photoCta">Poza 1: de sus</div>
+            <div class="small muted">fă poza sau alege din galerie</div>
           </div>
         </label>
-        <label class="field" style="margin-top:12px"><span>Detalii opționale (ajută estimarea)</span>
-          <input type="text" id="photoHint" placeholder="ex: farfurie de 26 cm, gătit cu o lingură de ulei">
+        <label class="field" style="margin-top:12px"><span>Ce nu se vede în poză (ajută mult)</span>
+          <input type="text" id="photoHint" placeholder="ex: prăjit în 1 lingură de ulei, 2 linguri de smântână sub salată">
         </label>
-        <button class="btn primary block" id="analyzePhoto" disabled>Analizează poza</button>
-        <p class="small muted" style="margin:8px 0 0">Gramajele din poză sunt estimări vizuale. Verifică-le și corectează-le înainte să salvezi.</p>
+        <button class="btn primary block" id="analyzePhoto" disabled>Analizează</button>
+        <p class="small muted" style="margin:8px 0 0">Bifează „am cântărit” când corectezi un gramaj pe cântar: aplicația învață din asta și îți măsoară acuratețea în Setări.</p>
       </div>
       <div id="addStatus"></div>
     </div>
@@ -247,7 +270,17 @@ section[hidden] { display: none; }
           <option value="claude-haiku-5-5">Claude Haiku 5.5 (cel mai ieftin)</option>
         </select>
       </label>
+      <div class="grid2">
+        <label class="field"><span>Precizie foto</span>
+          <select id="precision"><option value="3">Precis (×3)</option><option value="5">Maxim (×5)</option><option value="1">Rapid (×1)</option></select>
+        </label>
+        <label class="field"><span>Farfuria ta (cm)</span><input type="number" id="plateCm" min="15" max="40" inputmode="numeric"></label>
+      </div>
       <label class="row small" style="margin-bottom:4px"><input type="checkbox" id="aiFallback"> Folosește AI pentru produsele negăsite în baza locală</label>
+    </div>
+    <div class="card">
+      <h2>Acuratețe foto</h2>
+      <div id="accuracy"></div>
     </div>
     <div class="card">
       <h2>Date</h2>

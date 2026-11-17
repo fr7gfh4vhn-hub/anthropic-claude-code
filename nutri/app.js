@@ -1,6 +1,7 @@
 import { NUTRIENTS, KEYS, FOODS, findFood, parseLines, gramsFor, scale } from "./foods.js";
 import { ACTIVITY, GOALS, DEFAULT_PROFILE, computeTargets } from "./goals.js";
-import { analyze, prepareImage } from "./ai.js";
+import { analyzePhotos, analyzeText, prepareImage } from "./ai.js";
+import { calibKey, correctionFactor, addRecords, accuracyStats } from "./calib.js";
 
 const $ = (id) => document.getElementById(id);
 const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
@@ -21,11 +22,13 @@ const store = {
 
 let profile = { ...DEFAULT_PROFILE, ...store.get("profile", {}) };
 let log = store.get("log", {});
-let settings = { apiKey: "", model: "claude-opus-5-5", aiFallback: true, ...store.get("settings", {}) };
+let settings = { apiKey: "", model: "claude-opus-5-5", aiFallback: true, precision: 3, plateCm: 26, ...store.get("settings", {}) };
+let calib = store.get("calib", []);
 let day = isoDate(new Date());
 let draft = [];
-let photo = null;
-const PHOTO_PLACEHOLDER = document.getElementById("photoPreview").innerHTML;
+let photos = [];
+const MAX_PHOTOS = 3;
+const PHOTO_LABELS = ["de sus", "din lateral", "alt unghi"];
 
 function isoDate(d) {
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
@@ -148,7 +151,7 @@ $("calcText").onclick = async () => {
   if (missing.length && settings.aiFallback && settings.apiKey) {
     busy(`Caut cu AI: ${missing.map((m) => m.text).join(", ")}…`);
     try {
-      const res = await analyze({ apiKey: settings.apiKey, model: settings.model, text: missing.map((m) => (m.qty != null ? `${m.qty} ${m.unit || ""} ${m.text}` : m.text)).join("\n") });
+      const res = await analyzeText({ apiKey: settings.apiKey, model: settings.model, text: missing.map((m) => (m.qty != null ? `${m.qty} ${m.unit || ""} ${m.text}` : m.text)).join("\n") });
       items.push(...aiItemsToDraft(res.items, "AI"));
       notes = res.notes;
       status("");
@@ -163,30 +166,59 @@ function unknownItem(line) {
   return { id: uid(), name: line.text, grams: Math.round(gramsFor(line, null)), per100: Object.fromEntries(KEYS.map((k) => [k, 0])), src: "negăsit", found: false };
 }
 
+function renderShots() {
+  $("shots").innerHTML = photos.map((ph, i) => `<div class="shot"><img src="${ph.dataUrl}" alt="Poza ${i + 1}"><span>${i + 1}. ${PHOTO_LABELS[i]}</span>
+    <button data-rm-shot="${i}" aria-label="Șterge poza ${i + 1}">×</button></div>`).join("");
+  $("photoDrop").hidden = photos.length >= MAX_PHOTOS;
+  $("photoCta").textContent = photos.length ? `Poza ${photos.length + 1}: ${PHOTO_LABELS[photos.length]} (opțional, crește precizia)` : "Poza 1: de sus";
+  $("analyzePhoto").disabled = !photos.length;
+}
+$("shots").addEventListener("click", (ev) => {
+  const i = ev.target.closest("[data-rm-shot]")?.dataset.rmShot;
+  if (i == null) return;
+  photos.splice(+i, 1);
+  renderShots();
+});
+
 $("photoInput").onchange = async (ev) => {
   const file = ev.target.files[0];
+  ev.target.value = "";
   if (!file) return;
   try {
-    photo = await prepareImage(file);
-    $("photoPreview").innerHTML = `<img src="${photo.dataUrl}" alt="Poza farfuriei"><div class="small muted" style="margin-top:8px">Atinge pentru altă poză</div>`;
-    $("analyzePhoto").disabled = false;
+    photos.push(await prepareImage(file));
+    renderShots();
     status("");
   } catch (e) { fail(e); }
 };
 
 $("analyzePhoto").onclick = async () => {
-  if (!photo) return;
+  if (!photos.length) return;
   $("analyzePhoto").disabled = true;
-  busy("Analizez farfuria… (poate dura câteva secunde)");
+  busy("Analizez farfuria…");
   try {
-    const res = await analyze({ apiKey: settings.apiKey, model: settings.model, imageB64: photo.b64, mediaType: photo.mediaType, hint: $("photoHint").value.trim() });
+    const res = await analyzePhotos({
+      apiKey: settings.apiKey, model: settings.model, images: photos, hint: $("photoHint").value.trim(),
+      plateCm: settings.plateCm, samples: +settings.precision, onProgress: busy,
+    });
     status("");
     if (!res.items.length) return fail(res.notes || "Nu am găsit mâncare în poză.");
-    showDraft(aiItemsToDraft(res.items, "foto"), res.notes);
+    const items = res.items.map((it) => {
+      const food = FOODS.find((f) => f.name === it.db_match);
+      const key = calibKey(it);
+      const corr = correctionFactor(calib, key);
+      const grams = Math.round(it.grams * corr.factor);
+      return {
+        id: uid(), name: it.name, grams, per100: food ? food.per100 : it.per100, src: "foto", confidence: it.confidence, found: true,
+        photo: { key, raw: it.grams, shown: grams, spread: it.spread, corr }, weighed: false,
+      };
+    });
+    const extra = [];
+    if (photos.length === 1) extra.push("Sfat: o a doua poză din lateral îmbunătățește estimarea înălțimii porțiilor.");
+    showDraft(items, [res.notes, extra.join(" ")].filter(Boolean).join(" "));
   } catch (e) {
     fail(e);
   } finally {
-    $("analyzePhoto").disabled = false;
+    $("analyzePhoto").disabled = !photos.length;
   }
 };
 
@@ -202,17 +234,24 @@ function showDraft(items, notes) {
 function renderDraft() {
   $("draftItems").innerHTML = draft.map((it) => {
     const s = scale(it.per100, it.grams);
-    const pill = it.found
-      ? `<span class="pill">${esc(it.src)}${it.confidence ? " · încredere " + esc(it.confidence) : ""}</span>`
-      : `<span class="pill warn">negăsit – alege din bază</span>`;
+    const unsure = it.photo && (it.confidence === "mică" || it.photo.spread > 0.35);
+    const pill = !it.found
+      ? `<span class="pill warn">negăsit – alege din bază</span>`
+      : unsure
+        ? `<span class="pill warn">${esc(it.src)} · verifică gramajul</span>`
+        : `<span class="pill">${esc(it.src)}${it.confidence ? " · încredere " + esc(it.confidence) : ""}</span>`;
+    const photoInfo = it.photo
+      ? `<label class="weighed"><input type="checkbox" data-act="weighed" ${it.weighed ? "checked" : ""}> am cântărit</label>`
+        + (it.photo.corr.factor !== 1 ? `<span class="small muted">corectat ×${it.photo.corr.factor.toFixed(2)} din cântăririle tale</span>` : "")
+      : "";
     return `<div class="draft-item" data-id="${it.id}">
       <div class="row" style="justify-content:space-between; margin-bottom:8px"><b class="grow">${esc(it.name)}</b>${pill}
         <button class="icon-btn" data-act="rm" aria-label="Elimină"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
       <div class="row">
-        <input type="number" min="0" step="1" value="${it.grams}" data-act="grams" aria-label="Grame" inputmode="decimal"><span class="muted small">g</span>
-        <input type="text" class="grow" list="foodList" placeholder="Schimbă alimentul din bază…" data-act="swap" aria-label="Aliment din bază">
+        <input type="number" min="0" step="1" value="${it.grams}" data-act="grams" aria-label="Grame" inputmode="decimal"><span class="muted small">g</span> ${photoInfo}
       </div>
-      <div class="small muted" style="margin-top:6px">${fmt(s.kcal)} kcal · P ${fmt(s.p)} g · C ${fmt(s.c)} g · G ${fmt(s.f)} g</div>
+      <input type="text" list="foodList" placeholder="Schimbă alimentul din bază…" data-act="swap" aria-label="Aliment din bază" style="margin-top:8px">
+      <div class="small muted kcal-line" style="margin-top:6px">${fmt(s.kcal)} kcal · P ${fmt(s.p)} g · C ${fmt(s.c)} g · G ${fmt(s.f)} g</div>
     </div>`;
   }).join("");
   renderDraftTotals();
@@ -233,8 +272,10 @@ $("draftItems").addEventListener("input", (ev) => {
   if (el.dataset.act === "grams") {
     it.grams = Math.max(0, parseFloat(el.value) || 0);
     const s = scale(it.per100, it.grams);
-    el.closest(".draft-item").querySelector(".small.muted:last-child").textContent = `${fmt(s.kcal)} kcal · P ${fmt(s.p)} g · C ${fmt(s.c)} g · G ${fmt(s.f)} g`;
+    el.closest(".draft-item").querySelector(".kcal-line").textContent = `${fmt(s.kcal)} kcal · P ${fmt(s.p)} g · C ${fmt(s.c)} g · G ${fmt(s.f)} g`;
     renderDraftTotals();
+  } else if (el.dataset.act === "weighed") {
+    it.weighed = el.checked;
   } else if (el.dataset.act === "swap") {
     const food = FOODS.find((f) => f.name === el.value);
     if (food) Object.assign(it, { name: food.name, per100: food.per100, src: "bază", found: true, confidence: null }), renderDraft();
@@ -252,15 +293,21 @@ $("saveDraft").onclick = () => {
   const missing = draft.filter((d) => !d.found);
   if (missing.length && !confirm(`${missing.length} produs(e) nu au valori nutriționale și vor conta ca 0. Continui?`)) return;
   const meal = $("draftMeal").value;
+  const mealId = uid();
+  const weighed = draft.filter((d) => d.photo && d.weighed && d.grams > 0 && d.photo.raw > 0);
+  if (weighed.length) {
+    calib = addRecords(calib, weighed.map((d) => ({ key: d.photo.key, raw: d.photo.raw, shown: d.photo.shown, real: d.grams, kcal100: d.per100.kcal || 0, meal: mealId, t: Date.now() })));
+    store.set("calib", calib);
+    renderAccuracy();
+  }
   log[day] = [...(log[day] || []), ...draft.filter((d) => d.grams > 0).map((d) => ({ id: uid(), meal, name: d.name, grams: d.grams, per100: d.per100, src: d.src }))];
   store.set("log", log);
   draft = [];
   $("draftCard").hidden = true;
   $("foodText").value = "";
-  photo = null;
-  $("photoInput").value = "";
-  $("photoPreview").innerHTML = PHOTO_PLACEHOLDER;
-  $("analyzePhoto").disabled = true;
+  photos = [];
+  $("photoHint").value = "";
+  renderShots();
   status("");
   renderToday();
   showTab("today");
@@ -300,14 +347,20 @@ document.querySelectorAll("#tab-goals input, #tab-goals select").forEach((el) =>
 $("apiKey").value = settings.apiKey;
 $("model").value = settings.model;
 $("aiFallback").checked = settings.aiFallback;
+$("precision").value = String(settings.precision);
+$("plateCm").value = settings.plateCm;
 const saveSettings = () => {
-  settings = { apiKey: $("apiKey").value.trim(), model: $("model").value, aiFallback: $("aiFallback").checked };
+  const plate = parseFloat($("plateCm").value);
+  settings = {
+    apiKey: $("apiKey").value.trim(), model: $("model").value, aiFallback: $("aiFallback").checked,
+    precision: +$("precision").value, plateCm: plate >= 15 && plate <= 40 ? plate : 26,
+  };
   store.set("settings", settings);
 };
-["apiKey", "model", "aiFallback"].forEach((id) => $(id).addEventListener("change", saveSettings));
+["apiKey", "model", "aiFallback", "precision", "plateCm"].forEach((id) => $(id).addEventListener("change", saveSettings));
 
 $("exportData").onclick = () => {
-  const blob = new Blob([JSON.stringify({ profile, log }, null, 2)], { type: "application/json" });
+  const blob = new Blob([JSON.stringify({ profile, log, calib }, null, 2)], { type: "application/json" });
   const a = Object.assign(document.createElement("a"), { href: URL.createObjectURL(blob), download: `farfuria-${isoDate(new Date())}.json` });
   a.click();
   URL.revokeObjectURL(a.href);
@@ -317,8 +370,9 @@ $("importData").onchange = async (ev) => {
     const data = JSON.parse(await ev.target.files[0].text());
     if (data.profile) profile = { ...DEFAULT_PROFILE, ...data.profile };
     if (data.log) log = data.log;
-    store.set("profile", profile); store.set("log", log);
-    renderGoals(); renderToday();
+    if (Array.isArray(data.calib)) calib = data.calib;
+    store.set("profile", profile); store.set("log", log); store.set("calib", calib);
+    renderGoals(); renderToday(); renderAccuracy();
     alert("Date importate.");
   } catch { alert("Fișierul nu este valid."); }
 };
@@ -329,7 +383,31 @@ $("clearData").onclick = () => {
   renderGoals(); renderToday();
 };
 
+// ---------- acuratețe foto ----------
+const pct = (v) => Math.round(v * 100) + "%";
+function renderAccuracy() {
+  const st = accuracyStats(calib);
+  if (!st) {
+    $("accuracy").innerHTML = `<p class="small muted" style="margin:0">Încă nu ai date. Când analizezi o poză, cântărește alimentele, corectează gramajul și bifează „am cântărit”. După câteva mese vezi aici acuratețea reală, iar estimările următoare se corectează automat după obiceiurile tale (farfurie, porții, unghi).</p>`;
+    return;
+  }
+  const target = st.mealAccuracy ?? st.itemAccuracy;
+  $("accuracy").innerHTML = `<div class="stat">
+      <div><b>${st.mealAccuracy != null ? pct(st.mealAccuracy) : "–"}</b><span>pe masă (kcal)</span></div>
+      <div><b>${pct(st.itemAccuracy)}</b><span>pe aliment</span></div>
+      <div><b>${pct(st.within20)}</b><span>în ±20%</span></div>
+    </div>
+    <p class="small muted" style="margin:0">Din ${st.n} alimente cântărite în ${st.meals} mese. Ultimele 20: ${pct(st.recentAccuracy)}.
+    ${target >= 0.8 ? "Peste ținta de 80%." : "Sub ținta de 80%: adaugă poza din lateral și un reper (furculiță/card); calibrarea se îmbunătățește cu fiecare cântărire."}</p>
+    <button class="btn small" id="resetCalib" style="margin-top:10px">Resetează calibrarea</button>`;
+  $("resetCalib").onclick = () => {
+    if (!confirm("Ștergi istoricul de cântăriri și factorii de corecție?")) return;
+    calib = []; store.set("calib", calib); renderAccuracy();
+  };
+}
+
 // ---------- pornire ----------
+renderAccuracy();
 renderGoals();
 renderToday();
 if ("serviceWorker" in navigator && location.protocol === "https:") navigator.serviceWorker.register("sw.js").catch(() => {});
