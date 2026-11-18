@@ -69,7 +69,17 @@ b, .r { font-weight: inherit; color: var(--red); }
 @keyframes half-up { to { transform: translateY(-100%); } }
 @keyframes half-down { to { transform: translateY(100%); } }
 @keyframes intro-gone { to { visibility: hidden; } }
-@media (prefers-reduced-motion: reduce) { .intro { display: none; } }
+/* Reduced motion (an OS setting many laptops have on): same sequence, but only fades, nothing moves */
+@media (prefers-reduced-motion: reduce) {
+  .intro { animation: intro-fade .5s ease 2.2s forwards; }
+  .intro-half, .intro-line { animation: none; }
+  .intro-line { display: none; }
+  .intro-words { animation: fade-out .3s ease 1.3s forwards; }
+  .intro-words i { transform: none; opacity: 0; animation: fade-in .4s ease forwards; }
+  .intro-logo { animation: fade-in .4s ease 1.55s forwards; }
+}
+@keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes intro-fade { to { opacity: 0; visibility: hidden; } }
 
 /* Header */
 .top { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-block: 14px; }
