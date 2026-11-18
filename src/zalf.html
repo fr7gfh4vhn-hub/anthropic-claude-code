@@ -1,6 +1,6 @@
 <title>Zalf</title>
 <meta name="claude:viewport-fit-sides" content="cover">
-<meta name="description" content="Zalf este o agenție de marketing: strategie, conținut și reclame care vând. Laugh. Post. Sell.">
+<meta name="description" content="Zalf este o agenție de marketing: strategie, conținut și reclame care vând. Young. Sarcastic. Better.">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Manrope:wght@500;700;800&family=Unbounded:wght@500;600&display=swap">
 <style>
 /* Layout: the agency's own poster as a page. White studio wall, red poster type set edge to edge, the team photo between the lines. All copy is set like their posts: wide caps with red letters. Single light look by choice. */
@@ -43,27 +43,32 @@ b, .r { font-weight: inherit; color: var(--red); }
   padding-right: max(20px, env(safe-area-inset-right, 0px));
 }
 
-/* Intro: red curtain flashes LAUGH / POST / SELL, then lifts to reveal the page. CSS only, so the page never depends on it. */
-.intro {
-  position: fixed; inset: 0; z-index: 100; background: var(--red); color: var(--on-red);
-  display: grid; place-items: center; cursor: pointer;
-  animation: intro-out .8s cubic-bezier(.75, 0, .2, 1) 2.75s forwards;
-}
-.intro::after { content: ""; position: absolute; left: 0; right: 0; top: 100%; height: 45vh; background: var(--red); }
-.intro-logo {
-  grid-area: 1 / 1; place-self: stretch; display: grid; place-items: center; background: var(--bg);
-  opacity: 0; animation: intro-last .01s linear 1.65s forwards;
-}
-.intro-logo img { height: min(46vh, 62vw); width: auto; mix-blend-mode: multiply; animation: intro-pop .55s cubic-bezier(.2, .9, .3, 1.25) 1.65s both; }
-@keyframes intro-pop { from { transform: scale(.75); } }
-.intro span { grid-area: 1 / 1; font: 400 min(34vw, 60vh)/1 var(--poster); text-transform: uppercase; opacity: 0; }
-.intro span:nth-child(1) { animation: intro-word .5s steps(1) .15s; }
-.intro span:nth-child(2) { animation: intro-word .5s steps(1) .65s; }
-.intro span:nth-child(3) { animation: intro-word .5s steps(1) 1.15s; }
-.intro.skip { animation-delay: 0s; }
-@keyframes intro-word { from { opacity: 1; } to { opacity: 0; } }
-@keyframes intro-last { to { opacity: 1; } }
-@keyframes intro-out { to { transform: translateY(calc(-100% - 45vh)); visibility: hidden; } }
+/* Intro: on the studio wall, YOUNG / SARCASTIC / BETTER rise out of masks one by one, give way to the logo,
+   a red line draws across the middle and the wall splits open to reveal the page. CSS only; a tap skips it. */
+.intro { position: fixed; inset: 0; z-index: 100; cursor: pointer; animation: intro-gone 0s linear 3.45s forwards; }
+.intro-half { position: absolute; left: 0; right: 0; height: 50.5%; background: var(--bg); }
+.intro-half.t { top: 0; animation: half-up .8s cubic-bezier(.75, 0, .2, 1) 2.6s forwards; }
+.intro-half.b { bottom: 0; animation: half-down .8s cubic-bezier(.75, 0, .2, 1) 2.6s forwards; }
+.intro-line { position: absolute; left: 0; right: 0; top: calc(50% - 2px); height: 4px; background: var(--red); transform: scaleX(0); transform-origin: left; animation: line-draw .45s cubic-bezier(.7, 0, .3, 1) 2.15s forwards, fade-out .2s ease 2.65s forwards; }
+.intro-words { position: absolute; inset: 0; display: grid; place-content: center; justify-items: center; animation: words-out .45s cubic-bezier(.7, 0, .3, 1) 1.35s forwards; }
+.intro-words span { display: block; overflow: hidden; font: 400 min(19vw, 15vh)/.92 var(--poster); text-transform: uppercase; color: var(--red); }
+.intro-words span:nth-child(2) { color: var(--ink); }
+.intro-words i { display: block; font-style: normal; transform: translateY(105%); animation: word-up .55s cubic-bezier(.2, .8, .2, 1) forwards; }
+.intro-words span:nth-child(1) i { animation-delay: .15s; }
+.intro-words span:nth-child(2) i { animation-delay: .4s; }
+.intro-words span:nth-child(3) i { animation-delay: .65s; }
+.intro-logo { position: absolute; inset: 0; display: grid; place-items: center; opacity: 0; animation: logo-in .6s cubic-bezier(.2, .9, .3, 1.25) 1.65s forwards, fade-out .3s ease 2.5s forwards; }
+.intro-logo img { height: min(40vh, 56vw); width: auto; }
+.intro.skip, .intro.skip * { animation: none !important; }
+.intro.skip { opacity: 0; visibility: hidden; transition: opacity .35s ease, visibility 0s linear .35s; }
+@keyframes word-up { to { transform: none; } }
+@keyframes words-out { to { transform: translateY(-28px); opacity: 0; } }
+@keyframes logo-in { from { opacity: 0; transform: scale(.7) rotate(-8deg); } to { opacity: 1; transform: none; } }
+@keyframes line-draw { to { transform: scaleX(1); } }
+@keyframes fade-out { to { opacity: 0; } }
+@keyframes half-up { to { transform: translateY(-100%); } }
+@keyframes half-down { to { transform: translateY(100%); } }
+@keyframes intro-gone { to { visibility: hidden; } }
 @media (prefers-reduced-motion: reduce) { .intro { display: none; } }
 
 /* Header */
@@ -387,10 +392,11 @@ input, textarea { transition: border-color .2s ease; }
   .reveal { opacity: 0; transform: translateY(26px); transition: opacity .7s cubic-bezier(.2, .7, .2, 1) var(--d, 0s), transform .7s cubic-bezier(.2, .7, .2, 1) var(--d, 0s); }
   .reveal.in { opacity: 1; transform: none; }
   /* Hero enters as the intro curtain lifts */
-  .fit > span { animation: rise .9s cubic-bezier(.2, .8, .2, 1) 2.95s both; }
-  .hero-mid { animation: fade-up .9s cubic-bezier(.2, .8, .2, 1) 3.1s backwards; } /* backwards only: a lingering fill would isolate the photo's multiply blend */
+  .fit > span { animation: rise .9s cubic-bezier(.2, .8, .2, 1) 2.85s both; }
+  /* the photo itself never animates: any running animation isolates it and breaks its multiply blend (white box) */
+  .hero-copy, .sheets { animation: fade-up .9s cubic-bezier(.2, .8, .2, 1) 3s backwards; }
   .intro.skip ~ main .fit > span { animation-delay: .25s; }
-  .intro.skip ~ main .hero-mid { animation-delay: .4s; }
+  .intro.skip ~ main .hero-copy, .intro.skip ~ main .sheets { animation-delay: .4s; }
   .sheets .sheet:nth-child(1) { animation: float-a 6s ease-in-out infinite; }
 }
 @keyframes rise { from { transform: translateY(105%); } }
@@ -428,7 +434,12 @@ input, textarea { transition: border-color .2s ease; }
 }
 </style>
 <!--BODY-->
-<div class="intro" id="intro" aria-hidden="true"><span>Laugh</span><span>Post</span><span>Sell</span><div class="intro-logo"><img src="assets/logo.png" alt="" width="310" height="450"></div></div>
+<div class="intro" id="intro" aria-hidden="true">
+  <div class="intro-half t"></div><div class="intro-half b"></div>
+  <div class="intro-words"><span><i>Young</i></span><span><i>Sarcastic</i></span><span><i>Better</i></span></div>
+  <div class="intro-logo"><img src="assets/logo.png" alt="" width="1240" height="1800"></div>
+  <div class="intro-line"></div>
+</div>
 
 <header class="wrap top">
   <a class="logo" href="#top" aria-label="Zalf, acasă"><img src="assets/logo.png" alt="Zalf" width="310" height="450"></a>
@@ -460,8 +471,8 @@ input, textarea { transition: border-color .2s ease; }
   <div class="wrap hero">
     <div class="snow" id="snow" aria-hidden="true"></div>
     <h1 class="sr">Zalf, agenție de marketing. What we actually do.</h1>
-    <ul class="hero-labels" aria-label="Laugh, post, sell">
-      <li>Laugh</li><li>Post</li><li>Sell</li>
+    <ul class="hero-labels" aria-label="Young, sarcastic, better">
+      <li>Young</li><li>Sarcastic</li><li>Better</li>
     </ul>
     <p class="fit fit-a" aria-hidden="true"><span>What we</span></p>
     <div class="hero-mid">
@@ -480,7 +491,7 @@ input, textarea { transition: border-color .2s ease; }
             <circle cx="100" cy="100" r="100" fill="#E03A2A"/>
             <g class="ring">
               <path id="badge-path" d="M100,100 m-72,0 a72,72 0 1,1 144,0 a72,72 0 1,1 -144,0" fill="none"/>
-              <text font-family="Unbounded, Arial Black, sans-serif" font-weight="600" font-size="17" fill="#FFFFFF"><textPath href="#badge-path" textLength="446">LAUGH · POST · SELL · LAUGH · POST · SELL ·</textPath></text>
+              <text font-family="Unbounded, Arial Black, sans-serif" font-weight="600" font-size="17" fill="#FFFFFF"><textPath href="#badge-path" textLength="446">YOUNG · SARCASTIC · BETTER ·</textPath></text>
             </g>
             <text x="100" y="109" text-anchor="middle" font-family="Anton, Impact, sans-serif" font-size="30" fill="#FFFFFF">SCRIE-NE</text>
           </svg>
@@ -605,8 +616,8 @@ input, textarea { transition: border-color .2s ease; }
 
   <div class="marquee" aria-hidden="true">
     <div class="marquee-track">
-      <span>Laugh<b>·</b></span><span>Post<b>·</b></span><span>Sell<b>·</b></span><span>Laugh<b>·</b></span><span>Post<b>·</b></span><span>Sell<b>·</b></span><span>Laugh<b>·</b></span><span>Post<b>·</b></span><span>Sell<b>·</b></span><span>Laugh<b>·</b></span><span>Post<b>·</b></span><span>Sell<b>·</b></span>
-      <span>Laugh<b>·</b></span><span>Post<b>·</b></span><span>Sell<b>·</b></span><span>Laugh<b>·</b></span><span>Post<b>·</b></span><span>Sell<b>·</b></span><span>Laugh<b>·</b></span><span>Post<b>·</b></span><span>Sell<b>·</b></span><span>Laugh<b>·</b></span><span>Post<b>·</b></span><span>Sell<b>·</b></span>
+      <span>Young<b>·</b></span><span>Sarcastic<b>·</b></span><span>Better<b>·</b></span><span>Young<b>·</b></span><span>Sarcastic<b>·</b></span><span>Better<b>·</b></span><span>Young<b>·</b></span><span>Sarcastic<b>·</b></span><span>Better<b>·</b></span><span>Young<b>·</b></span><span>Sarcastic<b>·</b></span><span>Better<b>·</b></span>
+      <span>Young<b>·</b></span><span>Sarcastic<b>·</b></span><span>Better<b>·</b></span><span>Young<b>·</b></span><span>Sarcastic<b>·</b></span><span>Better<b>·</b></span><span>Young<b>·</b></span><span>Sarcastic<b>·</b></span><span>Better<b>·</b></span><span>Young<b>·</b></span><span>Sarcastic<b>·</b></span><span>Better<b>·</b></span>
     </div>
   </div>
 
