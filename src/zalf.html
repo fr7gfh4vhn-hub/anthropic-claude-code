@@ -261,17 +261,21 @@ footer a:hover { color: var(--red); }
 
 /* Packages */
 .packs { list-style: none; margin: 0 0 28px; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; align-items: stretch; }
-.pack { background: var(--paper); padding: 34px 26px; display: flex; flex-direction: column; gap: 18px; box-shadow: 0 1px 0 var(--line), 0 18px 30px -22px rgba(18, 18, 18, .5); }
+.pack { position: relative; background: var(--paper); border-radius: 26px; padding: 34px 26px; display: flex; flex-direction: column; gap: 18px; box-shadow: 0 1px 0 var(--line), 0 18px 30px -22px rgba(18, 18, 18, .5); }
 .pack h3 { font: 400 clamp(2.6rem, 5vw, 3.8rem)/0.9 var(--poster); letter-spacing: 0; color: var(--red); margin: 0; }
-.pack > p { margin: 0; font-size: 0.86rem; font-weight: 500; min-height: 3.6em; }
+.pack > p:not(.offer) { margin: 0; font-size: 0.86rem; font-weight: 500; }
 .pack ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; flex: 1; align-content: start; }
 .pack ul li { display: grid; grid-template-columns: 2.4em minmax(0, 1fr); align-items: baseline; gap: 10px; font-size: 0.95rem; font-weight: 600; border-top: 2px solid currentColor; padding-top: 10px; }
-.pack ul b { font: 400 2.4rem/1 var(--poster); letter-spacing: 0; }
+.pack ul b { font: 400 2.4rem/1 var(--poster); letter-spacing: 0; color: var(--red); }
 .pack .btn { text-align: center; line-height: 1.25; }
 .pack.hot { background: var(--red); color: var(--on-red); }
 .pack.hot h3, .pack.hot ul b { color: var(--on-red); }
 .pack.hot .btn { background: var(--ink); }
 .pack.hot .btn:hover { background: var(--paper); color: var(--ink); }
+.pack .offer { align-self: flex-start; margin: -6px 0 0; padding: 7px 14px; border-radius: 999px; background: var(--red); color: var(--on-red); font-size: .85rem; font-weight: 800; line-height: 1.2; }
+.pack { transition: transform .45s cubic-bezier(.2, .8, .2, 1), opacity .7s ease; }
+.pack:hover { transform: translateY(-6px) rotate(-1deg); }
+.packs > li:nth-child(even):hover { transform: translateY(-6px) rotate(1deg); }
 .packs-note { margin: 0; font-size: clamp(1rem, 2vw, 1.35rem); font-weight: 700; line-height: 1.2; }
 
 /* FAQ */
@@ -427,7 +431,6 @@ input, textarea { transition: border-color .2s ease; }
   .why-grid { grid-template-columns: minmax(0, 1fr); gap: 32px; }
   .why-photo { max-width: 340px; }
   .packs { grid-template-columns: minmax(0, 1fr); }
-  .pack > p { min-height: 0; }
   .contact .grid { grid-template-columns: minmax(0, 1fr); gap: 28px; }
   section { padding-block: 56px; }
 }
@@ -464,8 +467,9 @@ input, textarea { transition: border-color .2s ease; }
       <li style="--i:2"><a href="#portofoliu">Portofoliu</a></li>
       <li style="--i:3"><a href="#echipa">Echipa</a></li>
       <li style="--i:4"><a href="#de-ce">De ce noi</a></li>
-      <li style="--i:5"><a href="#faq">Întrebări</a></li>
-      <li style="--i:6"><a href="#contact">Contact</a></li>
+      <li style="--i:5"><a href="#pachete">Pachete</a></li>
+      <li style="--i:6"><a href="#faq">Întrebări</a></li>
+      <li style="--i:7"><a href="#contact">Contact</a></li>
     </ul>
     <div class="menu-foot">
       <a href="https://www.instagram.com/zalf_people" target="_blank" rel="noopener">Instagram ↗</a>
@@ -522,14 +526,14 @@ input, textarea { transition: border-color .2s ease; }
   <section id="despre">
     <div class="wrap do">
       <div>
-        <h2 class="statement">ZALF e o echipă de oameni care cred că marketingul poate fi <span class="mark">relaxat</span>, <span class="mark">smart</span> și <span class="mark">de ținut minte</span>.</h2>
-        <p class="about">Echipă tânără, cu pregătire serioasă în spate. Strategie, social media și conținut, cu un plan clar pentru fiecare brand. Și da, cele mai bune idei tot cu un martini în mână apar.</p>
+        <h2 class="statement">ZALF nu e doar o agenție. Suntem oamenii care cred că marketingul poate fi <span class="mark">relaxat</span>, <span class="mark">inteligent</span> și <span class="mark">memorabil</span> în același timp.</h2>
+        <p class="about">Suntem tineri, dar cu cap. Suntem conectați la trenduri, dar nu uităm să gândim strategic. Și da, știm că cele mai bune idei apar când ești puțin relaxat, cu un martini în mână și un vibe bun în jur.</p>
         <h3 class="mini">Ce facem diferit:</h3>
         <ul class="checks plain">
-          <li><span class="tick" aria-hidden="true">✓</span><p>Conținut care rămâne cu oamenii</p></li>
-          <li><span class="tick" aria-hidden="true">✓</span><p>Prezență acolo unde contează: TikTok, Instagram, Facebook, LinkedIn și Google</p></li>
-          <li><span class="tick" aria-hidden="true">✓</span><p>Strategii personalizate, cu obiective clare</p></li>
-          <li><span class="tick" aria-hidden="true">✓</span><p>Un brand vizibil, simplu și natural</p></li>
+          <li><span class="tick" aria-hidden="true">✓</span><p>Transformăm conținutul în experiențe memorabile</p></li>
+          <li><span class="tick" aria-hidden="true">✓</span><p>Îți construim prezența acolo unde contează: TikTok, Instagram, video</p></li>
+          <li><span class="tick" aria-hidden="true">✓</span><p>Gândim strategii clare și adaptabile</p></li>
+          <li><span class="tick" aria-hidden="true">✓</span><p>Ne asigurăm că brandul tău iese în evidență, fără să fie forțat</p></li>
         </ul>
       </div>
       <figure><img src="assets/studio.jpg" alt="Trei membri ai echipei Zalf la o ședință foto, lângă un laptop cu sigla Zalf și un trepied" width="1100" height="1090"></figure>
@@ -576,15 +580,20 @@ input, textarea { transition: border-color .2s ease; }
   <section id="servicii">
     <div class="wrap">
       <h2>Ce facem</h2>
-      <p class="sub">Tot ce-i trebuie brandului tău în online, într-un singur loc.</p>
+      <p class="sub">În timp ce alții fac marketing „de rutină”, noi transformăm ideile în conținut care atrage atenția. TikTok, Instagram, video sau strategii integrate — facem brandurile să fie văzute și auzite, fără efort inutil.</p>
       <ul class="cards">
         <li><h3>Creare conținut</h3><p>Postări, stories, reels și trenduri. Genul care te oprește din scroll.</p></li>
-        <li><h3>Strategie social media</h3><p>Notorietate, engagement real și un brand diferit de competiție.</p></li>
+        <li><h3>Strategie social media</h3><p>Ne uităm la nișa ta, la audiență și la ce funcționează azi, apoi construim o strategie care:</p>
+          <ul><li>Îți crește notorietatea</li><li>Generează engagement real</li><li>Îți diferențiază brandul de competiție</li></ul></li>
         <li><h3>Management comunitate</h3><p>Comentarii, mesaje, replici. Le ținem noi.</p></li>
         <li><h3>Publicitate plătită</h3><p>Reclame care nu-ți irosesc bugetul.</p></li>
-        <li><h3>Producție video</h3><p>Scenarii, echipamente și ajutor în fața camerei.</p></li>
-        <li><h3>Post-producție &amp; editare</h3><p>Clipuri scurte, cu subtitrări dinamice și sound design.</p></li>
-        <li><h3>Administrare cont</h3><p>Postăm, monitorizăm și răspundem. <span class="punch">Tu te ocupi de business. Noi te ținem vizibil.</span></p></li>
+        <li><h3>Producție video</h3><p>Te ajutăm să depășești emoțiile primei filmări. Venim cu:</p>
+          <ul><li>Scenarii și idei adaptate brandului tău</li><li>Echipamente profesionale (camere, lumini, lavaliere, dronă)</li><li>Flexibilitate: chiar și clipurile realizate cu telefon pot fi virale</li></ul></li>
+        <li><h3>Post-producție &amp; editare</h3><p>Editorii noștri fac videoclipurile:</p>
+          <ul><li>Scurte și captivante</li><li>Cu subtitrări dinamice și efecte vizuale</li><li>Colorizare și sound design profesionist</li></ul></li>
+        <li><h3>Administrare cont</h3><p>Dacă vrei, ne ocupăm de tot:</p>
+          <ul><li>Postarea conținutului</li><li>Monitorizarea performanței</li><li>Interacțiunea cu comunitatea</li></ul>
+          <p class="punch">Astfel tu te concentrezi pe business, noi pe vizibilitatea ta.</p></li>
       </ul>
     </div>
   </section>
@@ -604,6 +613,43 @@ input, textarea { transition: border-color .2s ease; }
     </div>
   </section>
 
+  <section id="pachete">
+    <div class="wrap">
+      <h2>Pachete</h2>
+      <ul class="packs">
+        <li class="pack">
+          <h3>Essential</h3>
+          <p class="offer">Partner Offer: 20% reducere prima lună</p>
+          <ul>
+            <li><b>4</b> Static Posts</li>
+            <li><b>8</b> Reels / TikToks</li>
+            <li><b>12</b> Stories</li>
+          </ul>
+          <a class="btn" href="#contact" data-pack="Essential">Cere ofertă personalizată</a>
+        </li>
+        <li class="pack hot">
+          <h3>Signature</h3>
+          <ul>
+            <li><b>6</b> Static Posts</li>
+            <li><b>12</b> Reels / TikToks</li>
+            <li><b>16</b> Stories</li>
+          </ul>
+          <a class="btn" href="#contact" data-pack="Signature">Cere ofertă personalizată</a>
+        </li>
+        <li class="pack">
+          <h3>Signature+</h3>
+          <ul>
+            <li><b>8</b> Static Posts</li>
+            <li><b>16</b> Reels / TikToks</li>
+            <li><b>20</b> Stories</li>
+          </ul>
+          <a class="btn" href="#contact" data-pack="Signature+">Cere ofertă personalizată</a>
+        </li>
+      </ul>
+      <p class="packs-note">Toate pachetele pot fi adaptate în funcție de <b>brand</b> și <b>obiective</b>.</p>
+    </div>
+  </section>
+
   <section id="faq">
     <div class="wrap">
       <h2>Întrebări frecvente</h2>
@@ -615,6 +661,10 @@ input, textarea { transition: border-color .2s ease; }
         <details>
           <summary>Ce include managementul comunității?</summary>
           <p>Urmărim comentariile, răspundem la mesaje și vorbim cu audiența ta ca pagina să pară vie.</p>
+        </details>
+        <details>
+          <summary>Pot schimba pachetul mai târziu?</summary>
+          <p>Da. Brandul tău crește, pachetul crește. Simplu.</p>
         </details>
         <details>
           <summary>Există un contract minim?</summary>
@@ -699,7 +749,7 @@ input, textarea { transition: border-color .2s ease; }
       });
     }, { rootMargin: '0px 0px -8% 0px' });
     var seen = new Map();
-    document.querySelectorAll('section h2, .sub, .checks li, .quotes li, .clients li, .services li, .steps li, .do figure, .contact form, .contact p, .socials, .team li, .faq details, .cards > li, .why li, .statement, .about, .mini, .why-photo').forEach(function (el) {
+    document.querySelectorAll('section h2, .sub, .checks li, .quotes li, .clients li, .services li, .steps li, .do figure, .contact form, .contact p, .socials, .team li, .faq details, .packs > li, .packs-note, .cards > li, .why li, .statement, .about, .mini, .why-photo').forEach(function (el) {
       if (el.getBoundingClientRect().top < window.innerHeight * 0.9) return;
       var i = seen.get(el.parentNode) || 0;
       seen.set(el.parentNode, i + 1);
